@@ -45,11 +45,20 @@ class MultLiteral(TerminalSymbol):
 
 
 # Non-terminals
+class ExpressionSymbol(NonTerminalSymbol):
+    @property
+    def productions(self) -> list[Production]:
+        return [
+            Production(TermSymbol, PlusLiteral, TermSymbol),
+            Production(TermSymbol),
+        ]
+
+
 class TermSymbol(NonTerminalSymbol):
     @property
     def productions(self) -> list[Production]:
         return [
-            Production(FactorSymbol, PlusLiteral, FactorSymbol),
+            Production(FactorSymbol, MultLiteral, FactorSymbol),
             Production(FactorSymbol),
         ]
 
