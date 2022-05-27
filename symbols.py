@@ -1,2 +1,0 @@
-class Symbol:
-    pass
