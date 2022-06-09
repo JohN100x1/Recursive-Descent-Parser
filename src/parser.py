@@ -72,6 +72,7 @@ class Parser:
 
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO)
     parser = Parser()
     parse_tree = parser.parse(
         [
