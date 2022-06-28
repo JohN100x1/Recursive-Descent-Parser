@@ -1,50 +1,69 @@
 import logging
+from collections import deque
+from typing import MutableSequence, Optional, Type
 
-from symbols import (
-    ExpressionSymbol,
-    IntegerLiteral,
-    MultLiteral,
-    NonTerminalSymbol,
-    PlusLiteral,
-    TerminalSymbol,
-    TSymbol,
-)
+from models.exceptions import DSLSyntaxError
+from models.grammar import Grammar, Production, base_grammar
+from models.symbols import NonTerminalSymbol, TerminalSymbol, TSymbol
+from models.symbols.nonterminals import BlockSymbol
 
 logger = logging.getLogger(__name__)
 
 
 class Parser:
-    def __init__(self):
-        self.parse_tree = {}
-        self.tokens = []
+    DEFAULT_START_SYMBOL: Type[NonTerminalSymbol] = BlockSymbol
 
-    def parse(self, tokens: list[TerminalSymbol]) -> list[TSymbol]:
-        self.parse_tree = []
+    def __init__(self, grammar: Optional[Grammar] = None):
+        self.grammar = grammar or base_grammar
+        self.parse_tree: MutableSequence[TSymbol] = deque()
+        self.tokens: list[TerminalSymbol] = []
+        self.terminals: list[TerminalSymbol] = []
+
+        self.rejected: set[tuple[Production, int]] = set()
+
+    def parse(
+        self,
+        tokens: list[TerminalSymbol],
+        start_symbol: Optional[NonTerminalSymbol] = None,
+    ) -> list[TSymbol]:
+        """
+        Parse a list of terminals from a starting non-terminal.
+        :param tokens: A list of terminals.
+        :param start_symbol: A optional non-terminal.
+        :return: A parse tree represented by a list of nested tokens.
+        """
+        self.parse_tree = deque()
         self.tokens = tokens
+        self.rejected = set()
 
-        node = ExpressionSymbol()
-        self.expand(node, self.parse_tree, 0)
-        logger.info(f"Parse Tree: {self.parse_tree}")
-
-        return self.parse_tree
+        node = start_symbol or self.DEFAULT_START_SYMBOL()
+        pointer = self.expand(node, self.parse_tree, 0)
+        logger.debug(f"Parse Tree: {self.parse_tree}")
+        if not self.parse_tree or pointer < len(self.tokens):
+            raise DSLSyntaxError("Input cannot be parsed.")
+        return list(self.parse_tree)
 
     def expand(
-        self, node: NonTerminalSymbol, tree: list[TSymbol], pivot: int
+        self,
+        node: NonTerminalSymbol,
+        tree: MutableSequence[TSymbol],
+        origin: int,
     ) -> int:
+        """
+        Expand a parse tree by trying all possible productions in the subtree.
+        :param node: The non-terminal node to expand.
+        :param tree: The super-tree of the non-terminal node.
+        :param origin: Starting index of terminal list to predict production.
+        :return: The total number of terminals contained within expanded tree.
+        """
         tree.append(node)
-        for production in node.productions:
-            prod = f"({node} -> {production.symbols()})"
-            logger.info(f"Trying {prod}")
-            pointer = pivot
-            for i, symbol_type in enumerate(production.body, 1):
-                symbol_name = symbol_type.__name__
-                logger.info(f"{i}. {prod}: {symbol_name}")
+        for production in self.grammar[node.__class__]:
+
+            if (production, origin) in self.rejected:
+                continue
+            pointer = origin
+            for symbol_type in production.body:
                 if pointer >= len(self.tokens):
-                    logger.info(
-                        f"Rejected {prod}: "
-                        f"Cannot fit production to {self.tokens[pivot:]}"
-                    )
-                    node.contents = []
                     break
 
                 if issubclass(symbol_type, TerminalSymbol):
@@ -52,35 +71,19 @@ class Parser:
                     if isinstance(curr, symbol_type):
                         node.contents.append(curr)
                         pointer += 1
+                        continue
                     else:
-                        logger.info(
-                            f"Rejected {prod}: {curr} is not a {symbol_name}"
-                        )
-                        node.contents = []
                         break
-                else:
-                    terminal_count = self.expand(
-                        symbol_type(), node.contents, pointer
-                    )
-                    pointer += terminal_count
+
+                terminal_count = self.expand(
+                    symbol_type(), node.contents, pointer
+                )
+                if terminal_count == 0:
+                    break
+                pointer += terminal_count
             else:
-                logger.info(f"Accepted {prod}")
-                return pointer - pivot
-            logger.info("-" * 100)
+                return pointer - origin
+            node.contents = deque()
+            self.rejected.add((production, origin))
         tree.pop()
         return 0
-
-
-if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO)
-    parser = Parser()
-    parse_tree = parser.parse(
-        [
-            IntegerLiteral("1"),
-            MultLiteral(),
-            IntegerLiteral("2"),
-            PlusLiteral(),
-            IntegerLiteral("3"),
-        ]
-    )
-    print(parse_tree)
