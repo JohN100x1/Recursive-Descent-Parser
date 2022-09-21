@@ -1,7 +1,7 @@
 import logging
 from abc import ABC, abstractmethod
 from collections import deque
-from typing import ClassVar, MutableSequence, Type
+from typing import ClassVar, MutableSequence
 
 from dsl.models import Grammar, Punctuator
 from dsl.models.exceptions import DSLSyntaxError
@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 
 
 class Parser(ABC):
-    DEFAULT_START_SYMBOL: ClassVar[Type[NonTerminalSymbol]]
+    DEFAULT_START_SYMBOL: ClassVar[type[NonTerminalSymbol]]
 
     @abstractmethod
     def parse(

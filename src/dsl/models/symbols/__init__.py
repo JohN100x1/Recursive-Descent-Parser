@@ -1,14 +1,6 @@
 from abc import ABC, abstractmethod
 from collections import deque
-from typing import (
-    Any,
-    ClassVar,
-    Iterable,
-    MutableSequence,
-    Optional,
-    Type,
-    Union,
-)
+from typing import Any, ClassVar, Iterable, MutableSequence
 
 from dsl.models.representables import Representable
 from dsl.models.representables.evaluables import Evaluable
@@ -47,7 +39,7 @@ class TerminalSymbol(Symbol):
 
 
 class NonTerminalSymbol(Symbol):
-    represents: ClassVar[Type[Evaluable]]
+    represents: ClassVar[type[Evaluable]]
 
     def __init__(self, contents: Iterable["TSymbol"] | None = None):
         self.contents: MutableSequence[TSymbol] = deque(contents or [])
@@ -68,4 +60,4 @@ class NonTerminalSymbol(Symbol):
             raise AttributeError(err_msg)
 
 
-TSymbol = Union[TerminalSymbol, NonTerminalSymbol]
+TSymbol = TerminalSymbol | NonTerminalSymbol

@@ -1,6 +1,6 @@
 import re
 from abc import ABC, abstractmethod
-from typing import Any, ClassVar, Type
+from typing import Any, ClassVar
 
 from dsl.models.exceptions import DSLSyntaxError
 from dsl.models.symbols import TerminalSymbol
@@ -90,9 +90,9 @@ class DefaultLexer(Lexer):
     def __init__(
         self,
         variables: dict[str, Any] | None = None,
-        inclusions: list[Type[TerminalSymbol]] | None = None,
-        exclusions: list[Type[TerminalSymbol]] | None = None,
-        base_symbols: list[Type[TerminalSymbol]] | None = None,
+        inclusions: list[type[TerminalSymbol]] | None = None,
+        exclusions: list[type[TerminalSymbol]] | None = None,
+        base_symbols: list[type[TerminalSymbol]] | None = None,
     ):
         self.variables = variables or {}
 

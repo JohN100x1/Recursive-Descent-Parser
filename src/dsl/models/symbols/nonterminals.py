@@ -1,4 +1,4 @@
-from typing import ClassVar, Type
+from typing import ClassVar
 
 from dsl.models.representables.evaluables import (
     Evaluable,
@@ -15,27 +15,27 @@ from dsl.models.symbols import NonTerminalSymbol
 
 
 class BlockSymbol(NonTerminalSymbol):
-    represents: ClassVar[Type[Evaluable]] = EvaluableBlock
+    represents: ClassVar[type[Evaluable]] = EvaluableBlock
 
 
 class IfStatementSymbol(NonTerminalSymbol):
-    represents: ClassVar[Type[Evaluable]] = EvaluableIfStatement
+    represents: ClassVar[type[Evaluable]] = EvaluableIfStatement
 
 
 class ElifStatementSymbol(NonTerminalSymbol):
-    represents: ClassVar[Type[Evaluable]] = EvaluableElifStatement
+    represents: ClassVar[type[Evaluable]] = EvaluableElifStatement
 
 
 class ActionSymbol(NonTerminalSymbol):
-    represents: ClassVar[Type[Evaluable]] = EvaluableAction
+    represents: ClassVar[type[Evaluable]] = EvaluableAction
 
 
 class ActionArgSymbol(NonTerminalSymbol):
-    represents: ClassVar[Type[Evaluable]] = EvaluableActionArg
+    represents: ClassVar[type[Evaluable]] = EvaluableActionArg
 
 
 class EvaluableExpressionSymbol(NonTerminalSymbol):
-    represents: ClassVar[Type[Evaluable]] = EvaluableExpression
+    represents: ClassVar[type[Evaluable]] = EvaluableExpression
 
 
 class ConditionExprSymbol(EvaluableExpressionSymbol):
@@ -71,8 +71,8 @@ class OperandSymbol(EvaluableExpressionSymbol):
 
 
 class ListSymbol(NonTerminalSymbol):
-    represents: ClassVar[Type[Evaluable]] = EvaluableList
+    represents: ClassVar[type[Evaluable]] = EvaluableList
 
 
 class ListArgSymbol(NonTerminalSymbol):
-    represents: ClassVar[Type[Evaluable]] = EvaluableListArg
+    represents: ClassVar[type[Evaluable]] = EvaluableListArg

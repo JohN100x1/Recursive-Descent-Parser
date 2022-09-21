@@ -1,4 +1,4 @@
-from typing import Any, Type
+from typing import Any
 
 from dsl.models.symbols import NonTerminalSymbol, TSymbol
 from dsl.models.symbols.nonterminals import (
@@ -56,7 +56,7 @@ from dsl.models.symbols.terminals import (
 
 
 class Production:
-    def __init__(self, *args: Type[TSymbol]):
+    def __init__(self, *args: type[TSymbol]):
         self.body = tuple(args)
 
     def __repr__(self) -> str:
@@ -71,7 +71,7 @@ class Production:
         return self.body == other.body
 
 
-class Grammar(dict[Type[NonTerminalSymbol], list[Production]]):
+class Grammar(dict[type[NonTerminalSymbol], list[Production]]):
     pass
 
 

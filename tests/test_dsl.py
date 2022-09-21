@@ -4,11 +4,7 @@ import pytest
 
 from dsl import DefaultDSL, DefaultLexer, DefaultParser, EvaluableAction
 from dsl.models import Function
-from dsl.models.exceptions import (
-    DSLException,
-    DSLSyntaxError,
-    DSLValidationError,
-)
+from dsl.models.exceptions import DSLException, DSLSyntaxError, DSLValidationError
 from dsl.models.grammar import Grammar, Production, base_grammar
 from dsl.models.representables.actions import Action, ReturnAction
 from dsl.models.representables.evaluables import (
