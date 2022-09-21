@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from typing import Any, Optional
+from typing import Any
 
 from dsl.models.exceptions import DSLException, DSLRuntimeError
 from dsl.models.representables import Representable
