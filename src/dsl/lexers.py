@@ -43,7 +43,7 @@ from dsl.models.symbols.terminals import (
 
 
 class Lexer(ABC):
-    DEFAULT_BASE_SYMBOLS: ClassVar[list[Type[TerminalSymbol]]] = [
+    DEFAULT_BASE_SYMBOLS: ClassVar[list[type[TerminalSymbol]]] = [
         IndexingSymbol,
         LeftSquareBracketLiteral,
         RightSquareBracketLiteral,

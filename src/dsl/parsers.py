@@ -35,7 +35,7 @@ class Parser(ABC):
 
 
 class DefaultParser(Parser):
-    DEFAULT_START_SYMBOL: ClassVar[Type[NonTerminalSymbol]] = BlockSymbol
+    DEFAULT_START_SYMBOL: ClassVar[type[NonTerminalSymbol]] = BlockSymbol
 
     def __init__(self, grammar: Grammar | None = None):
         self.grammar = grammar or base_grammar
