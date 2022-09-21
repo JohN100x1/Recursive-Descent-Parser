@@ -85,5 +85,5 @@ Here is the base grammar. Regex definitions for all literals can be found in `te
 
 <ListArgSymbol> = 
     "," <OperandSymbol> "]"
-    "," <OperandSymbol> <ListArgSymbol>
+    | "," <OperandSymbol> <ListArgSymbol>
 ```
