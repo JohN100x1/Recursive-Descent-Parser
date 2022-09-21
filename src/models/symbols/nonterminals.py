@@ -1,61 +1,78 @@
-from models.symbols import NonTerminalSymbol
+from typing import ClassVar, Type
+
+from quac_core.dsl.models.representables.evaluables import (
+    Evaluable,
+    EvaluableAction,
+    EvaluableActionArg,
+    EvaluableBlock,
+    EvaluableElifStatement,
+    EvaluableExpression,
+    EvaluableIfStatement,
+    EvaluableList,
+    EvaluableListArg,
+)
+from quac_core.dsl.models.symbols import NonTerminalSymbol
 
 
 class BlockSymbol(NonTerminalSymbol):
-    pass
+    represents: ClassVar[Type[Evaluable]] = EvaluableBlock
 
 
-class StatementSymbol(NonTerminalSymbol):
-    pass
-
-
-class ConditionExprSymbol(NonTerminalSymbol):
-    pass
-
-
-class ActionSymbol(NonTerminalSymbol):
-    pass
+class IfStatementSymbol(NonTerminalSymbol):
+    represents: ClassVar[Type[Evaluable]] = EvaluableIfStatement
 
 
 class ElifStatementSymbol(NonTerminalSymbol):
-    pass
+    represents: ClassVar[Type[Evaluable]] = EvaluableElifStatement
 
 
-class OperandSymbol(NonTerminalSymbol):
-    pass
+class ActionSymbol(NonTerminalSymbol):
+    represents: ClassVar[Type[Evaluable]] = EvaluableAction
 
 
 class ActionArgSymbol(NonTerminalSymbol):
+    represents: ClassVar[Type[Evaluable]] = EvaluableActionArg
+
+
+class EvaluableExpressionSymbol(NonTerminalSymbol):
+    represents: ClassVar[Type[Evaluable]] = EvaluableExpression
+
+
+class ConditionExprSymbol(EvaluableExpressionSymbol):
     pass
 
 
-class ConditionTermSymbol(NonTerminalSymbol):
+class ConditionTermSymbol(EvaluableExpressionSymbol):
     pass
 
 
-class ConditionFactorSymbol(NonTerminalSymbol):
+class ConditionFactorSymbol(EvaluableExpressionSymbol):
     pass
 
 
-class ConditionSymbol(NonTerminalSymbol):
+class ConditionSymbol(EvaluableExpressionSymbol):
     pass
 
 
-class ExpressionSymbol(NonTerminalSymbol):
+class ExpressionSymbol(EvaluableExpressionSymbol):
     pass
 
 
-class TermSymbol(NonTerminalSymbol):
+class TermSymbol(EvaluableExpressionSymbol):
     pass
 
 
-class FactorSymbol(NonTerminalSymbol):
+class FactorSymbol(EvaluableExpressionSymbol):
+    pass
+
+
+class OperandSymbol(EvaluableExpressionSymbol):
     pass
 
 
 class ListSymbol(NonTerminalSymbol):
-    pass
+    represents: ClassVar[Type[Evaluable]] = EvaluableList
 
 
 class ListArgSymbol(NonTerminalSymbol):
-    pass
+    represents: ClassVar[Type[Evaluable]] = EvaluableListArg

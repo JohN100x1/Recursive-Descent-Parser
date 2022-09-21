@@ -1,137 +1,351 @@
-from models.symbols import TerminalSymbol
+from typing import ClassVar
+
+from quac_core.dsl.models.representables.actions import ReturnAction
+from quac_core.dsl.models.representables.keywords import (
+    ElifKeyword,
+    ElseKeyword,
+    IfKeyword,
+    ThenKeyword,
+)
+from quac_core.dsl.models.representables.operands import (
+    BoolOperand,
+    FloatOperand,
+    IntegerOperand,
+    NoneOperand,
+    StringOperand,
+    VariableOperand,
+)
+from quac_core.dsl.models.representables.operators import (
+    AndOperator,
+    AttributeOperator,
+    CountFunction,
+    DivOperator,
+    EqualOperator,
+    GreaterThanOperator,
+    GreaterThanOrEqualOperator,
+    IndexingOperator,
+    LessThanOperator,
+    LessThanOrEqualOperator,
+    MinusOperator,
+    ModOperator,
+    MultOperator,
+    NotEqualOperator,
+    NotOperator,
+    OrOperator,
+    PlusOperator,
+)
+from quac_core.dsl.models.representables.punctuator import (
+    CommaPunctuator,
+    LeftParenthesis,
+    LeftSquareBracket,
+    RightParenthesis,
+    RightSquareBracket,
+)
+from quac_core.dsl.models.symbols import TerminalSymbol
 
 
 class IfLiteral(TerminalSymbol):
-    regex: str = "IF"
+    regex: ClassVar[str] = r"IF"
 
-
-class ThenLiteral(TerminalSymbol):
-    regex: str = "THEN"
-
-
-class ElseLiteral(TerminalSymbol):
-    regex: str = "ELSE"
+    @property
+    def represents(self) -> IfKeyword:
+        """Return the object the token represents."""
+        return IfKeyword()
 
 
 class ElifLiteral(TerminalSymbol):
-    regex: str = "ELIF"
+    regex: ClassVar[str] = r"ELIF"
+
+    @property
+    def represents(self) -> ElifKeyword:
+        """Return the object the token represents."""
+        return ElifKeyword()
 
 
-class ReturnLiteral(TerminalSymbol):
-    regex: str = r"RETURN\("
+class ThenLiteral(TerminalSymbol):
+    regex: ClassVar[str] = r"THEN"
+
+    @property
+    def represents(self) -> ThenKeyword:
+        """Return the object the token represents."""
+        return ThenKeyword()
 
 
-class LeftParenthesisLiteral(TerminalSymbol):
-    regex: str = r"\("
+class ElseLiteral(TerminalSymbol):
+    regex: ClassVar[str] = r"ELSE"
 
-
-class RightParenthesisLiteral(TerminalSymbol):
-    regex: str = r"\)"
-
-
-class CommaLiteral(TerminalSymbol):
-    regex: str = ","
-
-
-class OrLiteral(TerminalSymbol):
-    regex: str = "OR"
-
-
-class AndLiteral(TerminalSymbol):
-    regex: str = "AND"
-
-
-class NotLiteral(TerminalSymbol):
-    regex: str = "NOT"
-
-
-class BoolLiteral(TerminalSymbol):
-    regex: str = "TRUE|FALSE"
-
-
-class EqualLiteral(TerminalSymbol):
-    regex: str = "=="
-
-
-class NotEqualLiteral(TerminalSymbol):
-    regex: str = "!="
-
-
-class GreaterThanLiteral(TerminalSymbol):
-    regex: str = ">"
-
-
-class LessThanLiteral(TerminalSymbol):
-    regex: str = "<"
-
-
-class LessThanOrEqualLiteral(TerminalSymbol):
-    regex: str = "<="
-
-
-class GreaterThanOrEqualLiteral(TerminalSymbol):
-    regex: str = ">="
-
-
-class ModLiteral(TerminalSymbol):
-    regex: str = "%"
-
-
-class MultLiteral(TerminalSymbol):
-    regex: str = "*"
-
-
-class DivLiteral(TerminalSymbol):
-    regex: str = "/"
-
-
-class PlusLiteral(TerminalSymbol):
-    regex: str = r"\+"
-
-
-class MinusLiteral(TerminalSymbol):
-    regex: str = "-"
-
-
-class LeftSquareBracketLiteral(TerminalSymbol):
-    regex: str = r"\]"
-
-
-class RightSquareBracketLiteral(TerminalSymbol):
-    regex: str = r"\]"
-
-
-class NoneLiteral(TerminalSymbol):
-    regex: str = "NULL"
-
-
-class StringLiteral(TerminalSymbol):
-    regex: str = "\"[^\"]*\"|'[^']*'"
-
-
-class FloatLiteral(TerminalSymbol):
-    regex: str = r"\d+.\d+"
-
-
-class IntegerLiteral(TerminalSymbol):
-    regex: str = r"\d+"
-
-
-class VariableSymbol(TerminalSymbol):
-    regex: str = r"[A-z_]\w*"
-
-
-class AttributeSymbol(TerminalSymbol):
-    regex: str = r"\.[A-z_]\w*"
-
-
-class IndexingSymbol(TerminalSymbol):
-    regex: str = r"\[\d+\]"
+    @property
+    def represents(self) -> ElseKeyword:
+        """Return the object the token represents."""
+        return ElseKeyword()
 
 
 class CountLiteral(TerminalSymbol):
-    regex: str = r"COUNT\("
+    regex: ClassVar[str] = r"COUNT\("
+
+    @property
+    def represents(self) -> CountFunction:
+        """Return the object the token represents."""
+        return CountFunction(self.lexeme)
 
 
+class DivLiteral(TerminalSymbol):
+    regex: ClassVar[str] = "/"
+
+    @property
+    def represents(self) -> DivOperator:
+        """Return the object the token represents."""
+        return DivOperator(self.lexeme)
+
+
+class MultLiteral(TerminalSymbol):
+    regex: ClassVar[str] = r"\*"
+
+    @property
+    def represents(self) -> MultOperator:
+        """Return the object the token represents."""
+        return MultOperator(self.lexeme)
+
+
+class ModLiteral(TerminalSymbol):
+    regex: ClassVar[str] = "%"
+
+    @property
+    def represents(self) -> ModOperator:
+        """Return the object the token represents."""
+        return ModOperator(self.lexeme)
+
+
+class PlusLiteral(TerminalSymbol):
+    regex: ClassVar[str] = r"\+"
+
+    @property
+    def represents(self) -> PlusOperator:
+        """Return the object the token represents."""
+        return PlusOperator(self.lexeme)
+
+
+class MinusLiteral(TerminalSymbol):
+    regex: ClassVar[str] = "-"
+
+    @property
+    def represents(self) -> MinusOperator:
+        """Return the object the token represents."""
+        return MinusOperator(self.lexeme)
+
+
+class GreaterThanOrEqualLiteral(TerminalSymbol):
+    regex: ClassVar[str] = ">="
+
+    @property
+    def represents(self) -> GreaterThanOrEqualOperator:
+        """Return the object the token represents."""
+        return GreaterThanOrEqualOperator(self.lexeme)
+
+
+class LessThanOrEqualLiteral(TerminalSymbol):
+    regex: ClassVar[str] = "<="
+
+    @property
+    def represents(self) -> LessThanOrEqualOperator:
+        """Return the object the token represents."""
+        return LessThanOrEqualOperator(self.lexeme)
+
+
+class LessThanLiteral(TerminalSymbol):
+    regex: ClassVar[str] = "<"
+
+    @property
+    def represents(self) -> LessThanOperator:
+        """Return the object the token represents."""
+        return LessThanOperator(self.lexeme)
+
+
+class GreaterThanLiteral(TerminalSymbol):
+    regex: ClassVar[str] = ">"
+
+    @property
+    def represents(self) -> GreaterThanOperator:
+        """Return the object the token represents."""
+        return GreaterThanOperator(self.lexeme)
+
+
+class EqualLiteral(TerminalSymbol):
+    regex: ClassVar[str] = "=="
+
+    @property
+    def represents(self) -> EqualOperator:
+        """Return the object the token represents."""
+        return EqualOperator(self.lexeme)
+
+
+class NotEqualLiteral(TerminalSymbol):
+    regex: ClassVar[str] = "!="
+
+    @property
+    def represents(self) -> NotEqualOperator:
+        """Return the object the token represents."""
+        return NotEqualOperator(self.lexeme)
+
+
+class NotLiteral(TerminalSymbol):
+    regex: ClassVar[str] = r"NOT"
+
+    @property
+    def represents(self) -> NotOperator:
+        """Return the object the token represents."""
+        return NotOperator(self.lexeme)
+
+
+class AndLiteral(TerminalSymbol):
+    regex: ClassVar[str] = r"AND"
+
+    @property
+    def represents(self) -> AndOperator:
+        """Return the object the token represents."""
+        return AndOperator(self.lexeme)
+
+
+class OrLiteral(TerminalSymbol):
+    regex: ClassVar[str] = r"OR"
+
+    @property
+    def represents(self) -> OrOperator:
+        """Return the object the token represents."""
+        return OrOperator(self.lexeme)
+
+
+class LeftParenthesisLiteral(TerminalSymbol):
+    regex: ClassVar[str] = r"\("
+
+    @property
+    def represents(self) -> LeftParenthesis:
+        """Return the object the token represents."""
+        return LeftParenthesis()
+
+
+class RightParenthesisLiteral(TerminalSymbol):
+    regex: ClassVar[str] = r"\)"
+
+    @property
+    def represents(self) -> RightParenthesis:
+        """Return the object the token represents."""
+        return RightParenthesis()
+
+
+class NoneLiteral(TerminalSymbol):
+    regex: ClassVar[str] = r"None"
+
+    @property
+    def represents(self) -> NoneOperand:
+        """Return the object the token represents."""
+        return NoneOperand(self.lexeme)
+
+
+class BoolLiteral(TerminalSymbol):
+    regex: ClassVar[str] = r"TRUE|FALSE"
+
+    @property
+    def represents(self) -> BoolOperand:
+        """Return the object the token represents."""
+        return BoolOperand(self.lexeme)
+
+
+class StringLiteral(TerminalSymbol):
+    regex: ClassVar[str] = r"'[^']*'|\"[^\"]*\""
+
+    @property
+    def represents(self) -> StringOperand:
+        """Return the object the token represents."""
+        return StringOperand(self.lexeme)
+
+
+class IndexingSymbol(TerminalSymbol):
+    regex: ClassVar[str] = r"\[\d+\]"
+
+    @property
+    def represents(self) -> IndexingOperator:
+        """Return the object the token represents."""
+        return IndexingOperator(self.lexeme)
+
+
+class AttributeSymbol(TerminalSymbol):
+    regex: ClassVar[str] = r"\.[A-Za-z]\w*"
+
+    @property
+    def represents(self) -> AttributeOperator:
+        """Return the object the token represents."""
+        return AttributeOperator(self.lexeme)
+
+
+class VariableSymbol(TerminalSymbol):
+    regex: ClassVar[str] = r"[A-Za-z]\w*"
+
+    @property
+    def represents(self) -> VariableOperand:
+        """Return the object the token represents."""
+        return VariableOperand(self.lexeme, variables=self.variables)
+
+
+class FloatLiteral(TerminalSymbol):
+    regex: ClassVar[str] = r"\d+\.\d+"
+
+    @property
+    def represents(self) -> FloatOperand:
+        """Return the object the token represents."""
+        return FloatOperand(self.lexeme)
+
+
+class IntegerLiteral(TerminalSymbol):
+    regex: ClassVar[str] = r"\d+"
+
+    @property
+    def represents(self) -> IntegerOperand:
+        """Return the object the token represents."""
+        return IntegerOperand(self.lexeme)
+
+
+# This invalid token should be considered last
 class InvalidSymbol(TerminalSymbol):
-    regex: str = r"[^ \n]"
+    regex: ClassVar[str] = r"[^ \n]+"
+
+    @property
+    def represents(self) -> None:
+        """Return the object the token represents."""
+        return None
+
+
+class ReturnLiteral(TerminalSymbol):
+    regex: ClassVar[str] = r"RETURN\("
+
+    @property
+    def represents(self) -> ReturnAction:
+        """Return the object the token represents."""
+        return ReturnAction()
+
+
+class CommaLiteral(TerminalSymbol):
+    regex: ClassVar[str] = r","
+
+    @property
+    def represents(self) -> CommaPunctuator:
+        """Return the object the token represents."""
+        return CommaPunctuator()
+
+
+class LeftSquareBracketLiteral(TerminalSymbol):
+    regex: ClassVar[str] = r"\["
+
+    @property
+    def represents(self) -> LeftSquareBracket:
+        """Return the object the token represents."""
+        return LeftSquareBracket()
+
+
+class RightSquareBracketLiteral(TerminalSymbol):
+    regex: ClassVar[str] = r"\]"
+
+    @property
+    def represents(self) -> RightSquareBracket:
+        """Return the object the token represents."""
+        return RightSquareBracket()

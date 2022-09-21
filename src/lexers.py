@@ -1,9 +1,10 @@
 import re
-from typing import Any, Optional, Type
+from abc import ABC, abstractmethod
+from typing import Any, ClassVar, Type
 
-from models.exceptions import DSLSyntaxError
-from models.symbols import TerminalSymbol
-from models.symbols.terminals import (
+from quac_core.dsl.models.exceptions import DSLSyntaxError
+from quac_core.dsl.models.symbols import TerminalSymbol
+from quac_core.dsl.models.symbols.terminals import (
     AndLiteral,
     AttributeSymbol,
     BoolLiteral,
@@ -41,8 +42,8 @@ from models.symbols.terminals import (
 )
 
 
-class Lexer:
-    DEFAULT_BASE_SYMBOLS: list[Type[TerminalSymbol]] = [
+class Lexer(ABC):
+    DEFAULT_BASE_SYMBOLS: ClassVar[list[Type[TerminalSymbol]]] = [
         IndexingSymbol,
         LeftSquareBracketLiteral,
         RightSquareBracketLiteral,
@@ -79,31 +80,34 @@ class Lexer:
         InvalidSymbol,
     ]
 
+    @abstractmethod
+    def tokenize(self, input_string: str) -> list[TerminalSymbol]:
+        """Return a list of terminals for a given input string."""
+        ...
+
+
+class DefaultLexer(Lexer):
     def __init__(
         self,
-        variables: Optional[dict[str, Any]] = None,
-        inclusions: Optional[list[Type[TerminalSymbol]]] = None,
-        exclusions: Optional[list[Type[TerminalSymbol]]] = None,
-        base_symbols: Optional[list[Type[TerminalSymbol]]] = None,
+        variables: dict[str, Any] | None = None,
+        inclusions: list[Type[TerminalSymbol]] | None = None,
+        exclusions: list[Type[TerminalSymbol]] | None = None,
+        base_symbols: list[Type[TerminalSymbol]] | None = None,
     ):
         self.variables = variables or {}
 
-        symbols = {
-            s.__name__: s for s in base_symbols or self.DEFAULT_BASE_SYMBOLS
-        }
+        symbols = {s.__name__: s for s in base_symbols or self.DEFAULT_BASE_SYMBOLS}
         self.inclusions = {s.__name__: s for s in inclusions or []} | symbols
         for symbol in exclusions or []:
             self.inclusions.pop(symbol.__name__, None)
 
         # Create a regex matching map of symbols regexes to their name
-        regexes = [
-            f"(?P<{name}>{sym.regex})" for name, sym in self.inclusions.items()
-        ]
+        regexes = [f"(?P<{name}>{sym.regex})" for name, sym in self.inclusions.items()]
         self.pattern = re.compile(r"|".join(regexes))
 
     def tokenize(self, input_string: str) -> list[TerminalSymbol]:
         """
-        Return a list of validated token objects from a given input string.
+        Return a list of validated token objects from a given input string
         :param input_string: The input_string to split.
         :return: A list of Tokens obtained by splitting the input string.
         """
@@ -122,7 +126,7 @@ class Lexer:
     @staticmethod
     def validate_tokens(tokens: list[TerminalSymbol]) -> None:
         """
-        Validate a list of symbols to ensure symbols are valid.
+        Validate a list of symbols to ensure symbols are valid
         :param tokens: A list of token objects.
         :return: None
         """
