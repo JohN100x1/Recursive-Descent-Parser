@@ -5,6 +5,8 @@
 [![Style](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 This is a recursive descent parser that can handle simple IF statements.
+The process has roughly 4 main stages: lexing a string into a list of `TerminalSymbol` objects, parsing this list into a nested tree of `NonterminalSymbol` and `TerminalSymbol` objects, reducing this tree into a `Representable` object tree, and executing this `Representable` tree to return a list of outputs.
+
 Here is the base grammar. Regex definitions for all literals can be found in `terminals.py`.
 ```bnf
 <BlockSymbol> = 
