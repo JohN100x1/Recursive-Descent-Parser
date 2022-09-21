@@ -6,7 +6,7 @@ from dsl.models.exceptions import DSLSyntaxError
 from dsl.models.symbols import TerminalSymbol
 from dsl.models.symbols.terminals import (
     AndLiteral,
-    AttributeSymbol,
+    AttributeLiteral,
     BoolLiteral,
     CommaLiteral,
     CountLiteral,
@@ -18,7 +18,7 @@ from dsl.models.symbols.terminals import (
     GreaterThanLiteral,
     GreaterThanOrEqualLiteral,
     IfLiteral,
-    IndexingSymbol,
+    IndexingLiteral,
     IntegerLiteral,
     InvalidSymbol,
     LeftParenthesisLiteral,
@@ -38,13 +38,13 @@ from dsl.models.symbols.terminals import (
     RightSquareBracketLiteral,
     StringLiteral,
     ThenLiteral,
-    VariableSymbol,
+    VariableLiteral,
 )
 
 
 class Lexer(ABC):
     DEFAULT_BASE_SYMBOLS: ClassVar[list[type[TerminalSymbol]]] = [
-        IndexingSymbol,
+        IndexingLiteral,
         LeftSquareBracketLiteral,
         RightSquareBracketLiteral,
         CommaLiteral,
@@ -73,8 +73,8 @@ class Lexer(ABC):
         BoolLiteral,
         NoneLiteral,
         StringLiteral,
-        AttributeSymbol,
-        VariableSymbol,
+        AttributeLiteral,
+        VariableLiteral,
         FloatLiteral,
         IntegerLiteral,
         InvalidSymbol,
@@ -119,7 +119,7 @@ class DefaultLexer(Lexer):
         for match in re.finditer(self.pattern, input_string):
             lexeme = match.group()
             symbol = self.inclusions[str(match.lastgroup)]
-            if symbol == VariableSymbol:
+            if symbol == VariableLiteral:
                 token = symbol(lexeme=lexeme, variables=self.variables)
             else:
                 token = symbol(lexeme=lexeme)

@@ -36,7 +36,7 @@ from dsl.models.symbols.terminals import (
     RightParenthesisLiteral,
     RightSquareBracketLiteral,
     ThenLiteral,
-    VariableSymbol,
+    VariableLiteral,
 )
 
 return_string = "RETURN("
@@ -49,7 +49,7 @@ class TestParserParse:
         parser = DefaultParser()
         tokens = [
             IfLiteral("IF"),
-            VariableSymbol("a"),
+            VariableLiteral("a"),
             PlusLiteral("+"),
             IntegerLiteral("2"),
             GreaterThanLiteral(">"),
@@ -81,7 +81,7 @@ class TestParserParse:
                                                                                 [
                                                                                     OperandSymbol(
                                                                                         [
-                                                                                            VariableSymbol(
+                                                                                            VariableLiteral(
                                                                                                 "a"
                                                                                             )
                                                                                         ]
@@ -167,7 +167,7 @@ class TestParserParse:
         tokens = [
             IfLiteral("IF"),
             LeftParenthesisLiteral("("),
-            VariableSymbol("a"),
+            VariableLiteral("a"),
             PlusLiteral("+"),
             IntegerLiteral("2"),
             RightParenthesisLiteral(")"),
@@ -213,7 +213,7 @@ class TestParserParse:
                                                                                                                 [
                                                                                                                     OperandSymbol(
                                                                                                                         [
-                                                                                                                            VariableSymbol(
+                                                                                                                            VariableLiteral(
                                                                                                                                 "a"
                                                                                                                             )
                                                                                                                         ]

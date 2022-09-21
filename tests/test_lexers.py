@@ -4,14 +4,14 @@ from dsl import DefaultLexer
 from dsl.models.exceptions import DSLSyntaxError
 from dsl.models.symbols import TerminalSymbol
 from dsl.models.symbols.terminals import (
-    AttributeSymbol,
+    AttributeLiteral,
     ElifLiteral,
     EqualLiteral,
     FloatLiteral,
     GreaterThanLiteral,
     GreaterThanOrEqualLiteral,
     IfLiteral,
-    IndexingSymbol,
+    IndexingLiteral,
     IntegerLiteral,
     InvalidSymbol,
     LeftParenthesisLiteral,
@@ -20,7 +20,7 @@ from dsl.models.symbols.terminals import (
     RightParenthesisLiteral,
     StringLiteral,
     ThenLiteral,
-    VariableSymbol,
+    VariableLiteral,
 )
 
 
@@ -31,19 +31,19 @@ class TestTokenize:
         lexer = DefaultLexer()
         assert lexer.tokenize("IF cond THEN output1") == [
             IfLiteral("IF"),
-            VariableSymbol("cond"),
+            VariableLiteral("cond"),
             ThenLiteral("THEN"),
-            VariableSymbol("output1"),
+            VariableLiteral("output1"),
         ]
 
     def test_uneven_spaces(self):
         lexer = DefaultLexer()
         assert lexer.tokenize("a+ b  >   c") == [
-            VariableSymbol("a"),
+            VariableLiteral("a"),
             PlusLiteral("+"),
-            VariableSymbol("b"),
+            VariableLiteral("b"),
             GreaterThanLiteral(">"),
-            VariableSymbol("c"),
+            VariableLiteral("c"),
         ]
 
     def test_numbers(self):
@@ -58,28 +58,28 @@ class TestTokenize:
         lexer = DefaultLexer()
         assert lexer.tokenize("(a+b)") == [
             LeftParenthesisLiteral("("),
-            VariableSymbol("a"),
+            VariableLiteral("a"),
             PlusLiteral("+"),
-            VariableSymbol("b"),
+            VariableLiteral("b"),
             RightParenthesisLiteral(")"),
         ]
 
     def test_comparison_operators(self):
         lexer = DefaultLexer()
         assert lexer.tokenize("abc == def != ghi >=") == [
-            VariableSymbol("abc"),
+            VariableLiteral("abc"),
             EqualLiteral("=="),
-            VariableSymbol("def"),
+            VariableLiteral("def"),
             NotEqualLiteral("!="),
-            VariableSymbol("ghi"),
+            VariableLiteral("ghi"),
             GreaterThanOrEqualLiteral(">="),
         ]
 
     def test_attribute_operator(self):
         lexer = DefaultLexer()
         assert lexer.tokenize("abc.cdf == 1") == [
-            VariableSymbol("abc"),
-            AttributeSymbol(".cdf"),
+            VariableLiteral("abc"),
+            AttributeLiteral(".cdf"),
             EqualLiteral("=="),
             IntegerLiteral("1"),
         ]
@@ -101,7 +101,7 @@ class TestTokenize:
     def test_excluded_symbol(self):
         lexer = DefaultLexer(exclusions=[IfLiteral])
         assert lexer.tokenize("IF == 3") == [
-            VariableSymbol("IF"),
+            VariableLiteral("IF"),
             EqualLiteral("=="),
             IntegerLiteral("3"),
         ]
@@ -126,7 +126,7 @@ class TestTokenize:
 
     def test_underscore_variable(self):
         lexer = DefaultLexer()
-        assert lexer.tokenize("foo_bar") == [VariableSymbol("foo_bar")]
+        assert lexer.tokenize("foo_bar") == [VariableLiteral("foo_bar")]
 
 
 class TestValidateAdjacentTokens:
@@ -135,23 +135,23 @@ class TestValidateAdjacentTokens:
     def test_valid_tokens(self):
         lexer = DefaultLexer()
         tokens = [
-            VariableSymbol("abc"),
+            VariableLiteral("abc"),
             EqualLiteral("=="),
-            VariableSymbol("def"),
+            VariableLiteral("def"),
         ]
         assert lexer.validate_tokens(tokens) is None
 
     def test_index_and_attribute(self):
         lexer = DefaultLexer()
         tokens = [
-            VariableSymbol("abc"),
-            IndexingSymbol("[1]"),
-            AttributeSymbol(".def"),
+            VariableLiteral("abc"),
+            IndexingLiteral("[1]"),
+            AttributeLiteral(".def"),
         ]
         assert lexer.validate_tokens(tokens) is None
 
     def test_invalid_token(self):
         lexer = DefaultLexer()
-        tokens = [InvalidSymbol("£$@"), VariableSymbol("def")]
+        tokens = [InvalidSymbol("£$@"), VariableLiteral("def")]
         with pytest.raises(DSLSyntaxError):
             assert lexer.validate_tokens(tokens)

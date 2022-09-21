@@ -63,15 +63,15 @@ Here is the base grammar. Regex definitions for all literals can be found in `te
 
 <FactorSymbol> = 
     "COUNT(" <ConditionExprSymbol> ")"
-    | <VariableSymbol> <AttributeSymbol> <AttributeSymbol>
-    | <VariableSymbol> <IndexingSymbol> <AttributeSymbol>
-    | <VariableSymbol> <AttributeSymbol>
-    | <VariableSymbol> <IndexingSymbol>
+    | VariableLiteral AttributeLiteral AttributeLiteral
+    | VariableLiteral IndexingLiteral AttributeLiteral
+    | VariableLiteral AttributeLiteral
+    | VariableLiteral IndexingLiteral
     | <OperandSymbol>
     | "(" <ConditionSymbol> ")"
 
 <OperandSymbol> = 
-    <VariableSymbol>
+    VariableLiteral
     | IntegerLiteral
     | FloatLiteral
     | StringLiteral

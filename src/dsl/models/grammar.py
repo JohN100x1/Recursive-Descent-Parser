@@ -20,7 +20,7 @@ from dsl.models.symbols.nonterminals import (
 )
 from dsl.models.symbols.terminals import (
     AndLiteral,
-    AttributeSymbol,
+    AttributeLiteral,
     BoolLiteral,
     CommaLiteral,
     CountLiteral,
@@ -32,7 +32,7 @@ from dsl.models.symbols.terminals import (
     GreaterThanLiteral,
     GreaterThanOrEqualLiteral,
     IfLiteral,
-    IndexingSymbol,
+    IndexingLiteral,
     IntegerLiteral,
     LeftParenthesisLiteral,
     LeftSquareBracketLiteral,
@@ -51,7 +51,7 @@ from dsl.models.symbols.terminals import (
     RightSquareBracketLiteral,
     StringLiteral,
     ThenLiteral,
-    VariableSymbol,
+    VariableLiteral,
 )
 
 
@@ -155,10 +155,10 @@ base_grammar = Grammar(
             Production(
                 CountLiteral, ConditionExprSymbol, RightParenthesisLiteral
             ),
-            Production(VariableSymbol, AttributeSymbol, AttributeSymbol),
-            Production(VariableSymbol, IndexingSymbol, AttributeSymbol),
-            Production(VariableSymbol, AttributeSymbol),
-            Production(VariableSymbol, IndexingSymbol),
+            Production(VariableLiteral, AttributeLiteral, AttributeLiteral),
+            Production(VariableLiteral, IndexingLiteral, AttributeLiteral),
+            Production(VariableLiteral, AttributeLiteral),
+            Production(VariableLiteral, IndexingLiteral),
             Production(OperandSymbol),
             Production(
                 LeftParenthesisLiteral,
@@ -167,7 +167,7 @@ base_grammar = Grammar(
             ),
         ],
         OperandSymbol: [
-            Production(VariableSymbol),
+            Production(VariableLiteral),
             Production(IntegerLiteral),
             Production(FloatLiteral),
             Production(StringLiteral),

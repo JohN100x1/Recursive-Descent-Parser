@@ -25,16 +25,16 @@ from dsl.models.symbols.nonterminals import (
     OperandSymbol,
 )
 from dsl.models.symbols.terminals import (
-    AttributeSymbol,
+    AttributeLiteral,
     BoolLiteral,
     FloatLiteral,
-    IndexingSymbol,
+    IndexingLiteral,
     IntegerLiteral,
     NoneLiteral,
     PlusLiteral,
     RightParenthesisLiteral,
     StringLiteral,
-    VariableSymbol,
+    VariableLiteral,
 )
 
 
@@ -58,7 +58,7 @@ class OutcomeSymbol(TerminalSymbol):
 
 outcome_grammar = Grammar(base_grammar)
 outcome_grammar[ActionSymbol] = [
-    Production(OutcomeSymbol, VariableSymbol, RightParenthesisLiteral),
+    Production(OutcomeSymbol, VariableLiteral, RightParenthesisLiteral),
     Production(OutcomeSymbol, StringLiteral, RightParenthesisLiteral),
     Production(OutcomeSymbol, IntegerLiteral, RightParenthesisLiteral),
     Production(OutcomeSymbol, FloatLiteral, RightParenthesisLiteral),
@@ -168,10 +168,10 @@ class TestDefaultDSLValidate:
         foo_func_grammar = Grammar(base_grammar)
         foo_func_grammar[FactorSymbol] = [
             Production(FooFunc, ConditionExprSymbol, RightParenthesisLiteral),
-            Production(VariableSymbol, AttributeSymbol, AttributeSymbol),
-            Production(VariableSymbol, IndexingSymbol, AttributeSymbol),
-            Production(VariableSymbol, AttributeSymbol),
-            Production(VariableSymbol, IndexingSymbol),
+            Production(VariableLiteral, AttributeLiteral, AttributeLiteral),
+            Production(VariableLiteral, IndexingLiteral, AttributeLiteral),
+            Production(VariableLiteral, AttributeLiteral),
+            Production(VariableLiteral, IndexingLiteral),
             Production(OperandSymbol),
         ]
 

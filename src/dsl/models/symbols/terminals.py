@@ -260,7 +260,7 @@ class StringLiteral(TerminalSymbol):
         return StringOperand(self.lexeme)
 
 
-class IndexingSymbol(TerminalSymbol):
+class IndexingLiteral(TerminalSymbol):
     regex: ClassVar[str] = r"\[\d+\]"
 
     @property
@@ -269,7 +269,7 @@ class IndexingSymbol(TerminalSymbol):
         return IndexingOperator(self.lexeme)
 
 
-class AttributeSymbol(TerminalSymbol):
+class AttributeLiteral(TerminalSymbol):
     regex: ClassVar[str] = r"\.[A-Za-z]\w*"
 
     @property
@@ -278,7 +278,7 @@ class AttributeSymbol(TerminalSymbol):
         return AttributeOperator(self.lexeme)
 
 
-class VariableSymbol(TerminalSymbol):
+class VariableLiteral(TerminalSymbol):
     regex: ClassVar[str] = r"[A-Za-z]\w*"
 
     @property
