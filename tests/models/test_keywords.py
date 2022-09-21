@@ -1,4 +1,4 @@
-from quac_core.dsl.models.representables.keywords import IfKeyword
+from dsl.models.representables.keywords import IfKeyword
 
 
 class TestKeyword:

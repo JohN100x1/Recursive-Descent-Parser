@@ -2,18 +2,18 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from typing import Any
 
-from quac_core.dsl.lexers import DefaultLexer, Lexer
-from quac_core.dsl.models import Grammar
-from quac_core.dsl.models.exceptions import DSLSyntaxError, DSLValidationError
-from quac_core.dsl.models.representables.actions import Action
-from quac_core.dsl.models.representables.evaluables import (
+from dsl.lexers import DefaultLexer, Lexer
+from dsl.models import Grammar
+from dsl.models.exceptions import DSLSyntaxError, DSLValidationError
+from dsl.models.representables.actions import Action
+from dsl.models.representables.evaluables import (
     Evaluable,
     EvaluableAction,
     EvaluableList,
 )
-from quac_core.dsl.models.representables.operands import Operand
-from quac_core.dsl.models.symbols import NonTerminalSymbol
-from quac_core.dsl.parsers import DefaultParser, Parser
+from dsl.models.representables.operands import Operand
+from dsl.models.symbols import NonTerminalSymbol
+from dsl.parsers import DefaultParser, Parser
 
 
 @dataclass

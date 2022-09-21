@@ -1,9 +1,17 @@
 from abc import ABC, abstractmethod
 from collections import deque
-from typing import Any, ClassVar, Iterable, MutableSequence, Optional, Type, Union
+from typing import (
+    Any,
+    ClassVar,
+    Iterable,
+    MutableSequence,
+    Optional,
+    Type,
+    Union,
+)
 
-from quac_core.dsl.models.representables import Representable
-from quac_core.dsl.models.representables.evaluables import Evaluable
+from dsl.models.representables import Representable
+from dsl.models.representables.evaluables import Evaluable
 
 
 class Symbol(ABC):
@@ -27,7 +35,9 @@ class TerminalSymbol(Symbol):
 
     def __init_subclass__(cls, **kwargs: dict[str, Any]):
         if not hasattr(cls, "regex"):
-            raise AttributeError(f"{cls.__name__} missing required attribute 'regex'.")
+            raise AttributeError(
+                f"{cls.__name__} missing required attribute 'regex'."
+            )
 
     @property
     @abstractmethod
@@ -52,7 +62,9 @@ class NonTerminalSymbol(Symbol):
 
     def __init_subclass__(cls, **kwargs: dict[str, Any]):
         if not hasattr(cls, "represents"):
-            err_msg = f"{cls.__name__} missing required attribute 'represents'."
+            err_msg = (
+                f"{cls.__name__} missing required attribute 'represents'."
+            )
             raise AttributeError(err_msg)
 
 

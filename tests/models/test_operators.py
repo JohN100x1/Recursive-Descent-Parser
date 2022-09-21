@@ -1,7 +1,7 @@
 import pytest
 
-from quac_core.dsl.models import Operator
-from quac_core.dsl.models.representables.operators import (
+from dsl.models import Operator
+from dsl.models.representables.operators import (
     AndOperator,
     AttributeOperator,
     CountFunction,
@@ -61,7 +61,10 @@ def test_operators():
 
     # Test Unitary operators
     assert NotOperator("NOT").evaluate(False) is True
-    assert AttributeOperator(".token_value").evaluate(AttributeOperator(".a")) == ".a"
+    assert (
+        AttributeOperator(".token_value").evaluate(AttributeOperator(".a"))
+        == ".a"
+    )
 
     # Test functions
     assert CountFunction("COUNT(").evaluate([False, True]) == 1
@@ -88,17 +91,41 @@ def test_not_operator_list():
 
 def test_and_operator_list():
     operator = AndOperator("AND")
-    bool_list_1, bool_list_2 = [True, True, False, False], [True, False, True, False]
-    assert operator.evaluate(bool_list_1, bool_list_2) == [True, False, False, False]
+    bool_list_1, bool_list_2 = [True, True, False, False], [
+        True,
+        False,
+        True,
+        False,
+    ]
+    assert operator.evaluate(bool_list_1, bool_list_2) == [
+        True,
+        False,
+        False,
+        False,
+    ]
 
 
 def test_or_operator_list():
     operator = OrOperator("OR")
-    bool_list_1, bool_list_2 = [True, True, False, False], [True, False, True, False]
-    assert operator.evaluate(bool_list_1, bool_list_2) == [True, True, True, False]
+    bool_list_1, bool_list_2 = [True, True, False, False], [
+        True,
+        False,
+        True,
+        False,
+    ]
+    assert operator.evaluate(bool_list_1, bool_list_2) == [
+        True,
+        True,
+        True,
+        False,
+    ]
 
 
 def test_attribute_operator_list():
     operator = AttributeOperator(".z")
     assert operator.evaluate([{"z": 1}, {"z": 2}, {"z": 3}]) == [1, 2, 3]
-    assert operator.evaluate([{"z": "a"}, {"z": "b"}, {"z": "c"}]) == ["a", "b", "c"]
+    assert operator.evaluate([{"z": "a"}, {"z": "b"}, {"z": "c"}]) == [
+        "a",
+        "b",
+        "c",
+    ]

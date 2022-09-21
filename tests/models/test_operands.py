@@ -1,7 +1,7 @@
 import pytest
 
-from quac_core.dsl.models.exceptions import DSLException, DSLRuntimeError
-from quac_core.dsl.models.representables.operands import (
+from dsl.models.exceptions import DSLException, DSLRuntimeError
+from dsl.models.representables.operands import (
     BoolOperand,
     FloatOperand,
     IntegerOperand,

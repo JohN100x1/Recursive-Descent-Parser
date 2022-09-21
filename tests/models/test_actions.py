@@ -1,4 +1,4 @@
-from quac_core.dsl.models.representables.actions import ReturnAction
+from dsl.models.representables.actions import ReturnAction
 
 
 class TestAction:

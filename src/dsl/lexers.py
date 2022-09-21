@@ -2,9 +2,9 @@ import re
 from abc import ABC, abstractmethod
 from typing import Any, ClassVar, Type
 
-from quac_core.dsl.models.exceptions import DSLSyntaxError
-from quac_core.dsl.models.symbols import TerminalSymbol
-from quac_core.dsl.models.symbols.terminals import (
+from dsl.models.exceptions import DSLSyntaxError
+from dsl.models.symbols import TerminalSymbol
+from dsl.models.symbols.terminals import (
     AndLiteral,
     AttributeSymbol,
     BoolLiteral,
@@ -96,13 +96,17 @@ class DefaultLexer(Lexer):
     ):
         self.variables = variables or {}
 
-        symbols = {s.__name__: s for s in base_symbols or self.DEFAULT_BASE_SYMBOLS}
+        symbols = {
+            s.__name__: s for s in base_symbols or self.DEFAULT_BASE_SYMBOLS
+        }
         self.inclusions = {s.__name__: s for s in inclusions or []} | symbols
         for symbol in exclusions or []:
             self.inclusions.pop(symbol.__name__, None)
 
         # Create a regex matching map of symbols regexes to their name
-        regexes = [f"(?P<{name}>{sym.regex})" for name, sym in self.inclusions.items()]
+        regexes = [
+            f"(?P<{name}>{sym.regex})" for name, sym in self.inclusions.items()
+        ]
         self.pattern = re.compile(r"|".join(regexes))
 
     def tokenize(self, input_string: str) -> list[TerminalSymbol]:

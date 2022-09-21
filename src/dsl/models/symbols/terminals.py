@@ -1,13 +1,13 @@
 from typing import ClassVar
 
-from quac_core.dsl.models.representables.actions import ReturnAction
-from quac_core.dsl.models.representables.keywords import (
+from dsl.models.representables.actions import ReturnAction
+from dsl.models.representables.keywords import (
     ElifKeyword,
     ElseKeyword,
     IfKeyword,
     ThenKeyword,
 )
-from quac_core.dsl.models.representables.operands import (
+from dsl.models.representables.operands import (
     BoolOperand,
     FloatOperand,
     IntegerOperand,
@@ -15,7 +15,7 @@ from quac_core.dsl.models.representables.operands import (
     StringOperand,
     VariableOperand,
 )
-from quac_core.dsl.models.representables.operators import (
+from dsl.models.representables.operators import (
     AndOperator,
     AttributeOperator,
     CountFunction,
@@ -34,14 +34,14 @@ from quac_core.dsl.models.representables.operators import (
     OrOperator,
     PlusOperator,
 )
-from quac_core.dsl.models.representables.punctuator import (
+from dsl.models.representables.punctuator import (
     CommaPunctuator,
     LeftParenthesis,
     LeftSquareBracket,
     RightParenthesis,
     RightSquareBracket,
 )
-from quac_core.dsl.models.symbols import TerminalSymbol
+from dsl.models.symbols import TerminalSymbol
 
 
 class IfLiteral(TerminalSymbol):

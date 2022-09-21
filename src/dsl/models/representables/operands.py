@@ -1,8 +1,8 @@
 from abc import abstractmethod
 from typing import Any, Optional
 
-from quac_core.dsl.models.exceptions import DSLException, DSLRuntimeError
-from quac_core.dsl.models.representables import Representable
+from dsl.models.exceptions import DSLException, DSLRuntimeError
+from dsl.models.representables import Representable
 
 
 class Operand(Representable):
@@ -61,7 +61,9 @@ class VariableOperand(Operand):
         try:
             return self.variables[self.token_value]
         except KeyError as err:
-            raise DSLRuntimeError(f"{self.token_value} does not exist.") from err
+            raise DSLRuntimeError(
+                f"{self.token_value} does not exist."
+            ) from err
 
 
 class FloatOperand(Operand):

@@ -2,9 +2,9 @@ from dataclasses import MISSING
 
 import pytest
 
-from quac_core.dsl.models.exceptions import DSLRuntimeError
-from quac_core.dsl.models.representables.actions import ReturnAction
-from quac_core.dsl.models.representables.evaluables import (
+from dsl.models.exceptions import DSLRuntimeError
+from dsl.models.representables.actions import ReturnAction
+from dsl.models.representables.evaluables import (
     EvaluableAction,
     EvaluableActionArg,
     EvaluableBlock,
@@ -14,14 +14,14 @@ from quac_core.dsl.models.representables.evaluables import (
     EvaluableList,
     EvaluableListArg,
 )
-from quac_core.dsl.models.representables.keywords import (
+from dsl.models.representables.keywords import (
     ElifKeyword,
     ElseKeyword,
     IfKeyword,
     ThenKeyword,
 )
-from quac_core.dsl.models.representables.operands import BoolOperand, IntegerOperand
-from quac_core.dsl.models.representables.operators import (
+from dsl.models.representables.operands import BoolOperand, IntegerOperand
+from dsl.models.representables.operators import (
     CountFunction,
     GreaterThanOperator,
     LessThanOperator,
@@ -34,8 +34,12 @@ class TestEvaluable:
     """Test Evaluable."""
 
     def test_repr(self):
-        evaluable = EvaluableAction(contents=[ReturnAction(), IntegerOperand("1")])
-        evaluable_repr = "EvaluableAction([ReturnAction(), IntegerOperand('1')])"
+        evaluable = EvaluableAction(
+            contents=[ReturnAction(), IntegerOperand("1")]
+        )
+        evaluable_repr = (
+            "EvaluableAction([ReturnAction(), IntegerOperand('1')])"
+        )
         assert evaluable.__repr__() == evaluable_repr
 
     def test_eq(self):
@@ -56,7 +60,9 @@ class TestEvaluableEvaluate:
                 EvaluableList(
                     [
                         BoolOperand("TRUE"),
-                        EvaluableListArg([BoolOperand("FALSE"), BoolOperand("TRUE")]),
+                        EvaluableListArg(
+                            [BoolOperand("FALSE"), BoolOperand("TRUE")]
+                        ),
                     ]
                 ),
             ]
@@ -74,12 +80,18 @@ class TestEvaluableEvaluate:
 
     def test_leftover_operator(self):
         evaluable = EvaluableExpression([PlusOperator("+")])
-        with pytest.raises(DSLRuntimeError, match="Evaluation of Evaluable has left "):
+        with pytest.raises(
+            DSLRuntimeError, match="Evaluation of Evaluable has left "
+        ):
             evaluable.evaluate()
 
     def test_leftover_operands(self):
-        evaluable = EvaluableExpression([IntegerOperand("1"), IntegerOperand("2")])
-        with pytest.raises(DSLRuntimeError, match="not collapse to a single value."):
+        evaluable = EvaluableExpression(
+            [IntegerOperand("1"), IntegerOperand("2")]
+        )
+        with pytest.raises(
+            DSLRuntimeError, match="not collapse to a single value."
+        ):
             evaluable.evaluate()
 
     def test_simple_arithmetic(self):
@@ -94,14 +106,22 @@ class TestEvaluableEvaluate:
                 IntegerOperand("1"),
                 PlusOperator("+"),
                 EvaluableExpression(
-                    [IntegerOperand("2"), MultOperator("*"), IntegerOperand("3")]
+                    [
+                        IntegerOperand("2"),
+                        MultOperator("*"),
+                        IntegerOperand("3"),
+                    ]
                 ),
             ]
         )
         evaluable_2 = EvaluableExpression(
             [
                 EvaluableExpression(
-                    [IntegerOperand("1"), PlusOperator("+"), IntegerOperand("2")]
+                    [
+                        IntegerOperand("1"),
+                        PlusOperator("+"),
+                        IntegerOperand("2"),
+                    ]
                 ),
                 MultOperator("*"),
                 IntegerOperand("3"),
@@ -126,7 +146,9 @@ class TestEvaluableEvaluate:
                 EvaluableActionArg(
                     [
                         IntegerOperand("8"),
-                        EvaluableActionArg([IntegerOperand("9"), IntegerOperand("10")]),
+                        EvaluableActionArg(
+                            [IntegerOperand("9"), IntegerOperand("10")]
+                        ),
                     ]
                 ),
             ]
@@ -145,7 +167,11 @@ class TestEvaluableEvaluate:
             [
                 IfKeyword(),
                 EvaluableExpression(
-                    [IntegerOperand("3"), GreaterThanOperator(">"), IntegerOperand("2")]
+                    [
+                        IntegerOperand("3"),
+                        GreaterThanOperator(">"),
+                        IntegerOperand("2"),
+                    ]
                 ),
                 ThenKeyword(),
                 EvaluableAction([ReturnAction(), IntegerOperand("1")]),
@@ -158,7 +184,11 @@ class TestEvaluableEvaluate:
             [
                 IfKeyword(),
                 EvaluableExpression(
-                    [IntegerOperand("1"), GreaterThanOperator(">"), IntegerOperand("2")]
+                    [
+                        IntegerOperand("1"),
+                        GreaterThanOperator(">"),
+                        IntegerOperand("2"),
+                    ]
                 ),
                 ThenKeyword(),
                 EvaluableAction([ReturnAction(), IntegerOperand("1")]),
@@ -222,11 +252,15 @@ class TestEvaluableEvaluate:
 
     def test_invalid_if_statement(self):
         evaluable_1 = EvaluableIfStatement()
-        with pytest.raises(DSLRuntimeError, match="Cannot evaluate IF statement"):
+        with pytest.raises(
+            DSLRuntimeError, match="Cannot evaluate IF statement"
+        ):
             evaluable_1.evaluate()
 
         evaluable_2 = EvaluableIfStatement([IfKeyword(), BoolOperand("TRUE")])
-        with pytest.raises(DSLRuntimeError, match="Cannot evaluate IF statement"):
+        with pytest.raises(
+            DSLRuntimeError, match="Cannot evaluate IF statement"
+        ):
             evaluable_2.evaluate()
 
     def test_extended_elif_statement(self):
@@ -249,7 +283,9 @@ class TestEvaluableEvaluate:
                         ElifKeyword(),
                         BoolOperand("TRUE"),
                         ThenKeyword(),
-                        EvaluableAction([ReturnAction(), IntegerOperand("157")]),
+                        EvaluableAction(
+                            [ReturnAction(), IntegerOperand("157")]
+                        ),
                     ]
                 ),
             ]
@@ -269,5 +305,7 @@ class TestEvaluableEvaluate:
 
     def test_invalid_elif_statement(self):
         evaluable = EvaluableElifStatement()
-        with pytest.raises(DSLRuntimeError, match="Cannot evaluate ELIF statement"):
+        with pytest.raises(
+            DSLRuntimeError, match="Cannot evaluate ELIF statement"
+        ):
             evaluable.evaluate()

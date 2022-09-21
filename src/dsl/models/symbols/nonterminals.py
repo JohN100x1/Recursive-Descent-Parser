@@ -1,6 +1,6 @@
 from typing import ClassVar, Type
 
-from quac_core.dsl.models.representables.evaluables import (
+from dsl.models.representables.evaluables import (
     Evaluable,
     EvaluableAction,
     EvaluableActionArg,
@@ -11,7 +11,7 @@ from quac_core.dsl.models.representables.evaluables import (
     EvaluableList,
     EvaluableListArg,
 )
-from quac_core.dsl.models.symbols import NonTerminalSymbol
+from dsl.models.symbols import NonTerminalSymbol
 
 
 class BlockSymbol(NonTerminalSymbol):

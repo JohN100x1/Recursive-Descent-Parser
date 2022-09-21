@@ -1,6 +1,6 @@
-from quac_core.dsl.models.grammar import Production
-from quac_core.dsl.models.symbols.nonterminals import ExpressionSymbol
-from quac_core.dsl.models.symbols.terminals import IfLiteral
+from dsl.models.grammar import Production
+from dsl.models.symbols.nonterminals import ExpressionSymbol
+from dsl.models.symbols.terminals import IfLiteral
 
 
 class TestProduction:

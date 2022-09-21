@@ -3,20 +3,17 @@ from collections import deque
 from dataclasses import MISSING
 from typing import Any
 
-from quac_core.dsl.models.exceptions import DSLRuntimeError
-from quac_core.dsl.models.representables import Representable
-from quac_core.dsl.models.representables.actions import Action
-from quac_core.dsl.models.representables.keywords import (
+from dsl.models.exceptions import DSLRuntimeError
+from dsl.models.representables import Representable
+from dsl.models.representables.actions import Action
+from dsl.models.representables.keywords import (
     ElifKeyword,
     ElseKeyword,
     IfKeyword,
     ThenKeyword,
 )
-from quac_core.dsl.models.representables.operands import Operand
-from quac_core.dsl.models.representables.operators import (
-    BinaryOperator,
-    UnitaryOperator,
-)
+from dsl.models.representables.operands import Operand
+from dsl.models.representables.operators import BinaryOperator, UnitaryOperator
 
 
 class Evaluable(Representable):
@@ -46,7 +43,10 @@ class EvaluableBlock(Evaluable):
         outputs = []
         for item in self.contents:
             output = item.evaluate()
-            if isinstance(item, EvaluableIfStatement) and output is not MISSING:
+            if (
+                isinstance(item, EvaluableIfStatement)
+                and output is not MISSING
+            ):
                 outputs.append(output)
             elif isinstance(item, EvaluableBlock) and output:
                 outputs.extend(output)
@@ -92,7 +92,9 @@ class EvaluableIfStatement(Evaluable):
                 else:
                     return elif_statement.evaluate()
             case _:
-                raise DSLRuntimeError(f"Cannot evaluate IF statement {self.contents}.")
+                raise DSLRuntimeError(
+                    f"Cannot evaluate IF statement {self.contents}."
+                )
 
 
 class EvaluableElifStatement(Evaluable):
@@ -207,7 +209,9 @@ class EvaluableExpression(Evaluable):
         order of operations incorrectly.
         """
         operators: deque[UnitaryOperator | BinaryOperator] = deque()
-        operands: deque[Any] = deque()  # Contains the true value of the operands
+        operands: deque[
+            Any
+        ] = deque()  # Contains the true value of the operands
         for item in self.contents:
             # The only Representable object we care about inside an evaluable expression
             # are the operators, operands, and Evaluable (which we treat as operands).
@@ -226,7 +230,9 @@ class EvaluableExpression(Evaluable):
                 operator = operators.popleft()
                 x = operands.pop()
                 operands.append(operator.evaluate(x))
-            elif len(operands) > 1 and isinstance(operators[0], BinaryOperator):
+            elif len(operands) > 1 and isinstance(
+                operators[0], BinaryOperator
+            ):
                 operator = operators.popleft()
                 x, y = operands.popleft(), operands.popleft()
                 operands.append(operator.evaluate(x, y))

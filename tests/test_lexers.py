@@ -1,9 +1,9 @@
 import pytest
 
-from quac_core.dsl import DefaultLexer
-from quac_core.dsl.models.exceptions import DSLSyntaxError
-from quac_core.dsl.models.symbols import TerminalSymbol
-from quac_core.dsl.models.symbols.terminals import (
+from dsl import DefaultLexer
+from dsl.models.exceptions import DSLSyntaxError
+from dsl.models.symbols import TerminalSymbol
+from dsl.models.symbols.terminals import (
     AttributeSymbol,
     ElifLiteral,
     EqualLiteral,
@@ -120,7 +120,9 @@ class TestTokenize:
 
     def test_single_string_with_random_stuff_inside(self):
         lexer = DefaultLexer()
-        assert lexer.tokenize("'\"£^&(\"(=-ac '") == [StringLiteral("'\"£^&(\"(=-ac '")]
+        assert lexer.tokenize("'\"£^&(\"(=-ac '") == [
+            StringLiteral("'\"£^&(\"(=-ac '")
+        ]
 
     def test_underscore_variable(self):
         lexer = DefaultLexer()
@@ -132,12 +134,20 @@ class TestValidateAdjacentTokens:
 
     def test_valid_tokens(self):
         lexer = DefaultLexer()
-        tokens = [VariableSymbol("abc"), EqualLiteral("=="), VariableSymbol("def")]
+        tokens = [
+            VariableSymbol("abc"),
+            EqualLiteral("=="),
+            VariableSymbol("def"),
+        ]
         assert lexer.validate_tokens(tokens) is None
 
     def test_index_and_attribute(self):
         lexer = DefaultLexer()
-        tokens = [VariableSymbol("abc"), IndexingSymbol("[1]"), AttributeSymbol(".def")]
+        tokens = [
+            VariableSymbol("abc"),
+            IndexingSymbol("[1]"),
+            AttributeSymbol(".def"),
+        ]
         assert lexer.validate_tokens(tokens) is None
 
     def test_invalid_token(self):

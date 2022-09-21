@@ -1,7 +1,7 @@
 import pytest
 
-from quac_core.dsl.models import Punctuator
-from quac_core.dsl.models.representables.punctuator import LeftParenthesis
+from dsl.models import Punctuator
+from dsl.models.representables.punctuator import LeftParenthesis
 
 
 class TestPunctuator:

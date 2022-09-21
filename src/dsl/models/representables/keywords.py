@@ -1,4 +1,4 @@
-from quac_core.dsl.models.representables import Representable
+from dsl.models.representables import Representable
 
 
 class Keyword(Representable):

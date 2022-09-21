@@ -1,7 +1,7 @@
 from typing import Any, Type
 
-from quac_core.dsl.models.symbols import NonTerminalSymbol, TSymbol
-from quac_core.dsl.models.symbols.nonterminals import (
+from dsl.models.symbols import NonTerminalSymbol, TSymbol
+from dsl.models.symbols.nonterminals import (
     ActionArgSymbol,
     ActionSymbol,
     BlockSymbol,
@@ -18,7 +18,7 @@ from quac_core.dsl.models.symbols.nonterminals import (
     OperandSymbol,
     TermSymbol,
 )
-from quac_core.dsl.models.symbols.terminals import (
+from dsl.models.symbols.terminals import (
     AndLiteral,
     AttributeSymbol,
     BoolLiteral,
@@ -89,7 +89,9 @@ base_grammar = Grammar(
                 ActionSymbol,
                 ElifStatementSymbol,
             ),
-            Production(IfLiteral, ConditionExprSymbol, ThenLiteral, ActionSymbol),
+            Production(
+                IfLiteral, ConditionExprSymbol, ThenLiteral, ActionSymbol
+            ),
         ],
         ElifStatementSymbol: [
             Production(ElseLiteral, ActionSymbol),
@@ -100,7 +102,9 @@ base_grammar = Grammar(
                 ActionSymbol,
                 ElifStatementSymbol,
             ),
-            Production(ElifLiteral, ConditionExprSymbol, ThenLiteral, ActionSymbol),
+            Production(
+                ElifLiteral, ConditionExprSymbol, ThenLiteral, ActionSymbol
+            ),
         ],
         ActionSymbol: [
             Production(ReturnLiteral, OperandSymbol, RightParenthesisLiteral),
@@ -128,8 +132,12 @@ base_grammar = Grammar(
             Production(ExpressionSymbol, NotEqualLiteral, ConditionSymbol),
             Production(ExpressionSymbol, GreaterThanLiteral, ConditionSymbol),
             Production(ExpressionSymbol, LessThanLiteral, ConditionSymbol),
-            Production(ExpressionSymbol, LessThanOrEqualLiteral, ConditionSymbol),
-            Production(ExpressionSymbol, GreaterThanOrEqualLiteral, ConditionSymbol),
+            Production(
+                ExpressionSymbol, LessThanOrEqualLiteral, ConditionSymbol
+            ),
+            Production(
+                ExpressionSymbol, GreaterThanOrEqualLiteral, ConditionSymbol
+            ),
             Production(ExpressionSymbol),
         ],
         ExpressionSymbol: [
@@ -144,14 +152,18 @@ base_grammar = Grammar(
             Production(FactorSymbol),
         ],
         FactorSymbol: [
-            Production(CountLiteral, ConditionExprSymbol, RightParenthesisLiteral),
+            Production(
+                CountLiteral, ConditionExprSymbol, RightParenthesisLiteral
+            ),
             Production(VariableSymbol, AttributeSymbol, AttributeSymbol),
             Production(VariableSymbol, IndexingSymbol, AttributeSymbol),
             Production(VariableSymbol, AttributeSymbol),
             Production(VariableSymbol, IndexingSymbol),
             Production(OperandSymbol),
             Production(
-                LeftParenthesisLiteral, ConditionSymbol, RightParenthesisLiteral
+                LeftParenthesisLiteral,
+                ConditionSymbol,
+                RightParenthesisLiteral,
             ),
         ],
         OperandSymbol: [
@@ -165,7 +177,9 @@ base_grammar = Grammar(
         ],
         ListSymbol: [
             Production(
-                LeftSquareBracketLiteral, OperandSymbol, RightSquareBracketLiteral
+                LeftSquareBracketLiteral,
+                OperandSymbol,
+                RightSquareBracketLiteral,
             ),
             Production(LeftSquareBracketLiteral, OperandSymbol, ListArgSymbol),
         ],

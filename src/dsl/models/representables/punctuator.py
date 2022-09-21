@@ -1,6 +1,6 @@
 from typing import Any, ClassVar
 
-from quac_core.dsl.models.representables import Representable
+from dsl.models.representables import Representable
 
 
 class Punctuator(Representable):
@@ -16,7 +16,9 @@ class Punctuator(Representable):
 
     def __init_subclass__(cls, **kwargs: dict[str, Any]):
         if not hasattr(cls, "precedence"):
-            err_msg = f"{cls.__name__} missing required attribute 'precedence'."
+            err_msg = (
+                f"{cls.__name__} missing required attribute 'precedence'."
+            )
             raise AttributeError(err_msg)
 
 

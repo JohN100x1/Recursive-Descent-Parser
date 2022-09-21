@@ -1,7 +1,7 @@
 import pytest
 
-from quac_core.dsl import DefaultParser, DSLSyntaxError
-from quac_core.dsl.models.symbols.nonterminals import (
+from dsl import DefaultParser, DSLSyntaxError
+from dsl.models.symbols.nonterminals import (
     ActionArgSymbol,
     ActionSymbol,
     BlockSymbol,
@@ -18,7 +18,7 @@ from quac_core.dsl.models.symbols.nonterminals import (
     OperandSymbol,
     TermSymbol,
 )
-from quac_core.dsl.models.symbols.terminals import (
+from dsl.models.symbols.terminals import (
     BoolLiteral,
     CommaLiteral,
     ElifLiteral,
@@ -90,7 +90,9 @@ class TestParserParse:
                                                                             )
                                                                         ]
                                                                     ),
-                                                                    PlusLiteral("+"),
+                                                                    PlusLiteral(
+                                                                        "+"
+                                                                    ),
                                                                     ExpressionSymbol(
                                                                         [
                                                                             TermSymbol(
@@ -112,7 +114,9 @@ class TestParserParse:
                                                                     ),
                                                                 ]
                                                             ),
-                                                            GreaterThanLiteral(">"),
+                                                            GreaterThanLiteral(
+                                                                ">"
+                                                            ),
                                                             ConditionSymbol(
                                                                 [
                                                                     ExpressionSymbol(
@@ -275,7 +279,9 @@ class TestParserParse:
                                                                     )
                                                                 ]
                                                             ),
-                                                            GreaterThanLiteral(">"),
+                                                            GreaterThanLiteral(
+                                                                ">"
+                                                            ),
                                                             ConditionSymbol(
                                                                 [
                                                                     ExpressionSymbol(
@@ -384,7 +390,9 @@ class TestParserParse:
                                                                     )
                                                                 ]
                                                             ),
-                                                            GreaterThanLiteral(">"),
+                                                            GreaterThanLiteral(
+                                                                ">"
+                                                            ),
                                                             ConditionSymbol(
                                                                 [
                                                                     ExpressionSymbol(
@@ -492,7 +500,9 @@ class TestParserParse:
                                     ActionSymbol(
                                         [
                                             ReturnLiteral(return_string),
-                                            OperandSymbol([IntegerLiteral("9")]),
+                                            OperandSymbol(
+                                                [IntegerLiteral("9")]
+                                            ),
                                             RightParenthesisLiteral(")"),
                                         ]
                                     ),
@@ -501,11 +511,15 @@ class TestParserParse:
                                             ElseLiteral("ElSE"),
                                             ActionSymbol(
                                                 [
-                                                    ReturnLiteral(return_string),
+                                                    ReturnLiteral(
+                                                        return_string
+                                                    ),
                                                     OperandSymbol(
                                                         [IntegerLiteral("10")]
                                                     ),
-                                                    RightParenthesisLiteral(")"),
+                                                    RightParenthesisLiteral(
+                                                        ")"
+                                                    ),
                                                 ]
                                             ),
                                         ]
@@ -543,7 +557,11 @@ class TestParserParse:
                             ConditionExprSymbol(
                                 [
                                     ConditionTermSymbol(
-                                        [ConditionFactorSymbol([BoolLiteral("FALSE")])]
+                                        [
+                                            ConditionFactorSymbol(
+                                                [BoolLiteral("FALSE")]
+                                            )
+                                        ]
                                     )
                                 ]
                             ),
@@ -577,7 +595,9 @@ class TestParserParse:
                                     ActionSymbol(
                                         [
                                             ReturnLiteral(return_string),
-                                            OperandSymbol([IntegerLiteral("5")]),
+                                            OperandSymbol(
+                                                [IntegerLiteral("5")]
+                                            ),
                                             RightParenthesisLiteral(")"),
                                         ]
                                     ),
@@ -656,12 +676,18 @@ class TestParserParse:
         assert parser.parse(tokens, start_symbol=ExpressionSymbol()) == [
             ExpressionSymbol(
                 [
-                    TermSymbol([FactorSymbol([OperandSymbol([IntegerLiteral("2")])])]),
+                    TermSymbol(
+                        [FactorSymbol([OperandSymbol([IntegerLiteral("2")])])]
+                    ),
                     MinusLiteral("-"),
                     ExpressionSymbol(
                         [
                             TermSymbol(
-                                [FactorSymbol([OperandSymbol([IntegerLiteral("1")])])]
+                                [
+                                    FactorSymbol(
+                                        [OperandSymbol([IntegerLiteral("1")])]
+                                    )
+                                ]
                             )
                         ]
                     ),
@@ -706,7 +732,9 @@ class TestParserParse:
                                     ActionArgSymbol(
                                         [
                                             CommaLiteral(","),
-                                            OperandSymbol([IntegerLiteral("3")]),
+                                            OperandSymbol(
+                                                [IntegerLiteral("3")]
+                                            ),
                                             RightParenthesisLiteral(")"),
                                         ]
                                     ),
@@ -745,7 +773,11 @@ class TestParserParse:
                             ConditionExprSymbol(
                                 [
                                     ConditionTermSymbol(
-                                        [ConditionFactorSymbol([BoolLiteral("TRUE")])]
+                                        [
+                                            ConditionFactorSymbol(
+                                                [BoolLiteral("TRUE")]
+                                            )
+                                        ]
                                     )
                                 ]
                             ),
@@ -757,7 +789,9 @@ class TestParserParse:
                                         [
                                             ListSymbol(
                                                 [
-                                                    LeftSquareBracketLiteral("["),
+                                                    LeftSquareBracketLiteral(
+                                                        "["
+                                                    ),
                                                     OperandSymbol(
                                                         [IntegerLiteral("1")]
                                                     ),
@@ -765,11 +799,17 @@ class TestParserParse:
                                                         [
                                                             CommaLiteral(","),
                                                             OperandSymbol(
-                                                                [IntegerLiteral("2")]
+                                                                [
+                                                                    IntegerLiteral(
+                                                                        "2"
+                                                                    )
+                                                                ]
                                                             ),
                                                             ListArgSymbol(
                                                                 [
-                                                                    CommaLiteral(","),
+                                                                    CommaLiteral(
+                                                                        ","
+                                                                    ),
                                                                     OperandSymbol(
                                                                         [
                                                                             IntegerLiteral(
@@ -791,7 +831,9 @@ class TestParserParse:
                                     ActionArgSymbol(
                                         [
                                             CommaLiteral(","),
-                                            OperandSymbol([BoolLiteral("FALSE")]),
+                                            OperandSymbol(
+                                                [BoolLiteral("FALSE")]
+                                            ),
                                             RightParenthesisLiteral(")"),
                                         ]
                                     ),

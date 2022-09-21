@@ -3,12 +3,12 @@ from abc import ABC, abstractmethod
 from collections import deque
 from typing import ClassVar, MutableSequence, Type
 
-from quac_core.dsl.models import Grammar, Punctuator
-from quac_core.dsl.models.exceptions import DSLSyntaxError
-from quac_core.dsl.models.grammar import Production, base_grammar
-from quac_core.dsl.models.representables import Representable
-from quac_core.dsl.models.symbols import NonTerminalSymbol, TerminalSymbol, TSymbol
-from quac_core.dsl.models.symbols.nonterminals import BlockSymbol
+from dsl.models import Grammar, Punctuator
+from dsl.models.exceptions import DSLSyntaxError
+from dsl.models.grammar import Production, base_grammar
+from dsl.models.representables import Representable
+from dsl.models.symbols import NonTerminalSymbol, TerminalSymbol, TSymbol
+from dsl.models.symbols.nonterminals import BlockSymbol
 
 logger = logging.getLogger(__name__)
 
@@ -68,7 +68,10 @@ class DefaultParser(Parser):
         return list(self.parse_tree)
 
     def expand(
-        self, node: NonTerminalSymbol, tree: MutableSequence[TSymbol], origin: int
+        self,
+        node: NonTerminalSymbol,
+        tree: MutableSequence[TSymbol],
+        origin: int,
     ) -> int:
         """
         Expand a parse tree by trying all possible productions in the subtree
@@ -95,7 +98,9 @@ class DefaultParser(Parser):
                         continue
                     break
 
-                terminal_count = self.expand(symbol_type(), node.contents, pointer)
+                terminal_count = self.expand(
+                    symbol_type(), node.contents, pointer
+                )
                 if terminal_count == 0:
                     break
                 pointer += terminal_count

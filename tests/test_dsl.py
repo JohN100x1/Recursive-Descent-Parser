@@ -2,29 +2,29 @@ from typing import Any
 
 import pytest
 
-from quac_core.dsl import DefaultDSL, DefaultLexer, DefaultParser, EvaluableAction
-from quac_core.dsl.models import Function
-from quac_core.dsl.models.exceptions import (
+from dsl import DefaultDSL, DefaultLexer, DefaultParser, EvaluableAction
+from dsl.models import Function
+from dsl.models.exceptions import (
     DSLException,
     DSLSyntaxError,
     DSLValidationError,
 )
-from quac_core.dsl.models.grammar import Grammar, Production, base_grammar
-from quac_core.dsl.models.representables.actions import Action, ReturnAction
-from quac_core.dsl.models.representables.evaluables import (
+from dsl.models.grammar import Grammar, Production, base_grammar
+from dsl.models.representables.actions import Action, ReturnAction
+from dsl.models.representables.evaluables import (
     EvaluableActionArg,
     EvaluableList,
     EvaluableListArg,
 )
-from quac_core.dsl.models.representables.operands import IntegerOperand, NoneOperand
-from quac_core.dsl.models.symbols import TerminalSymbol
-from quac_core.dsl.models.symbols.nonterminals import (
+from dsl.models.representables.operands import IntegerOperand, NoneOperand
+from dsl.models.symbols import TerminalSymbol
+from dsl.models.symbols.nonterminals import (
     ActionSymbol,
     ConditionExprSymbol,
     FactorSymbol,
     OperandSymbol,
 )
-from quac_core.dsl.models.symbols.terminals import (
+from dsl.models.symbols.terminals import (
     AttributeSymbol,
     BoolLiteral,
     FloatLiteral,
@@ -110,9 +110,7 @@ class TestDefaultDSLValidate:
 
     def test_three_outcomes(self):
         dsl = DefaultDSL()
-        input_string = (
-            "IF 1.2 > 3.4 THEN RETURN(5) IF 8 > 6.7 THEN RETURN(9) ELSE RETURN(3)"
-        )
+        input_string = "IF 1.2 > 3.4 THEN RETURN(5) IF 8 > 6.7 THEN RETURN(9) ELSE RETURN(3)"
         validation_result = dsl.validate(input_string)
         assert validation_result.is_valid is True
         assert validation_result.actions == [
@@ -178,7 +176,9 @@ class TestDefaultDSLValidate:
         ]
 
         dsl_1 = DefaultDSL()
-        validation_result_1 = dsl_1.validate("IF FooFunc(3) == 1 THEN RETURN(3)")
+        validation_result_1 = dsl_1.validate(
+            "IF FooFunc(3) == 1 THEN RETURN(3)"
+        )
         assert validation_result_1.is_valid is False
         assert validation_result_1.actions == []
         assert isinstance(validation_result_1.error, DSLSyntaxError)
@@ -186,7 +186,9 @@ class TestDefaultDSLValidate:
         lexer_2 = DefaultLexer(inclusions=[FooFunc])
         parser_2 = DefaultParser(grammar=foo_func_grammar)
         dsl_2 = DefaultDSL(lexer=lexer_2, parser=parser_2)
-        validation_result_2 = dsl_2.validate("IF FooFunc(3) == 1 THEN RETURN(3)")
+        validation_result_2 = dsl_2.validate(
+            "IF FooFunc(3) == 1 THEN RETURN(3)"
+        )
         assert validation_result_2.is_valid is True
         assert validation_result_2.actions == [
             EvaluableAction([ReturnAction(), IntegerOperand("3")]),
@@ -209,7 +211,9 @@ class TestDefaultDSLValidate:
         ]
         assert validation_result.error is None
 
-        validation_result = outcome_dsl.validate("IF 2 > 1 THEN OUTCOME(2) OUTCOME(3)")
+        validation_result = outcome_dsl.validate(
+            "IF 2 > 1 THEN OUTCOME(2) OUTCOME(3)"
+        )
         assert validation_result.is_valid is False
         assert validation_result.actions == []
         assert isinstance(validation_result.error, DSLSyntaxError)
@@ -258,7 +262,9 @@ class TestDefaultDSLValidate:
                 [
                     ReturnAction(),
                     IntegerOperand("1"),
-                    EvaluableActionArg([IntegerOperand("2"), IntegerOperand("3")]),
+                    EvaluableActionArg(
+                        [IntegerOperand("2"), IntegerOperand("3")]
+                    ),
                 ]
             )
         ]
@@ -302,7 +308,9 @@ class TestDefaultDSLExecute:
 
     def test_null_outcome(self):
         dsl = DefaultDSL()
-        assert dsl.execute("IF 0 > 1 THEN RETURN(3) ELSE RETURN(None)") == [None]
+        assert dsl.execute("IF 0 > 1 THEN RETURN(3) ELSE RETURN(None)") == [
+            None
+        ]
 
     def test_single_if_statement(self):
         dsl = DefaultDSL()
@@ -310,14 +318,20 @@ class TestDefaultDSLExecute:
 
     def test_elif_statement(self):
         dsl = DefaultDSL()
-        assert dsl.execute("IF 1 > 2 THEN RETURN(3) ELIF 8 > 6.7 THEN RETURN(9)") == [9]
+        assert dsl.execute(
+            "IF 1 > 2 THEN RETURN(3) ELIF 8 > 6.7 THEN RETURN(9)"
+        ) == [9]
 
     def test_two_if_statement(self):
         dsl = DefaultDSL()
-        assert dsl.execute("IF 2 > 1 THEN RETURN(3) IF 3 > 2 THEN RETURN(4)") == [3, 4]
+        assert dsl.execute(
+            "IF 2 > 1 THEN RETURN(3) IF 3 > 2 THEN RETURN(4)"
+        ) == [3, 4]
 
     def test_else_statement(self):
-        input_string = "IF 1 > 2 THEN RETURN(3) IF 4 > 5 THEN RETURN(6) ELSE RETURN(7)"
+        input_string = (
+            "IF 1 > 2 THEN RETURN(3) IF 4 > 5 THEN RETURN(6) ELSE RETURN(7)"
+        )
         dsl = DefaultDSL()
         assert dsl.execute(input_string) == [7]
 
@@ -332,7 +346,9 @@ class TestDefaultDSLExecute:
 
     def test_not_operator(self):
         dsl = DefaultDSL()
-        assert dsl.execute("IF NOT 1 > 2 THEN RETURN('bar') ELSE RETURN(3)") == ["bar"]
+        assert dsl.execute(
+            "IF NOT 1 > 2 THEN RETURN('bar') ELSE RETURN(3)"
+        ) == ["bar"]
 
     def test_or_operator(self):
         dsl = DefaultDSL()
@@ -344,9 +360,7 @@ class TestDefaultDSLExecute:
         assert dsl.execute(input_string) == [None]
 
     def test_not_and_or_precedence(self):
-        input_string = (
-            "IF 0 == 1 OR NOT 2 == 3 AND 4 > 3 THEN RETURN('foo') ELSE RETURN(None)"
-        )
+        input_string = "IF 0 == 1 OR NOT 2 == 3 AND 4 > 3 THEN RETURN('foo') ELSE RETURN(None)"
         dsl = DefaultDSL()
         assert dsl.execute(input_string) == ["foo"]
 
@@ -356,7 +370,9 @@ class TestDefaultDSLExecute:
         assert dsl.execute("IF COUNT(BooList) == 2 THEN RETURN(1)") == [1]
 
     def test_indexing(self):
-        input_string = "IF alphabet[2] == 'b' THEN RETURN('b') ELSE RETURN(None)"
+        input_string = (
+            "IF alphabet[2] == 'b' THEN RETURN('b') ELSE RETURN(None)"
+        )
         lexer = DefaultLexer(variables={"alphabet": ["a", "b", "c"]})
         dsl = DefaultDSL(lexer=lexer)
         assert dsl.execute(input_string) == ["b"]
@@ -380,17 +396,23 @@ class TestDefaultDSLExecute:
     def test_attribute_dict_stacked_1(self):
         lexer = DefaultLexer(variables={"foo": {"bar": {"cool": 1}}})
         dsl = DefaultDSL(lexer=lexer)
-        assert dsl.execute("IF foo.bar == 1 THEN RETURN(1) ELSE RETURN(None)") == [None]
+        assert dsl.execute(
+            "IF foo.bar == 1 THEN RETURN(1) ELSE RETURN(None)"
+        ) == [None]
 
     def test_attribute_dict_stacked_2(self):
         lexer = DefaultLexer(variables={"foo": {"bar": {"cool": 1}}})
         dsl = DefaultDSL(lexer=lexer)
-        assert dsl.execute("IF foo.bar.cool == 1 THEN RETURN(1) ELSE RETURN(2)") == [1]
+        assert dsl.execute(
+            "IF foo.bar.cool == 1 THEN RETURN(1) ELSE RETURN(2)"
+        ) == [1]
 
     def test_variable_in_if_statement(self):
         lexer = DefaultLexer(variables={"TotalScore": 0.9, "output": "foobar"})
         dsl = DefaultDSL(lexer=lexer)
-        assert dsl.execute("IF TotalScore > 0.8 THEN RETURN(output)") == ["foobar"]
+        assert dsl.execute("IF TotalScore > 0.8 THEN RETURN(output)") == [
+            "foobar"
+        ]
 
     def test_newlines(self):
         dsl = DefaultDSL()
@@ -402,16 +424,20 @@ class TestDefaultDSLExecute:
             assert dsl.execute("IF 2 £$@ == #~?? 2 THEN RETURN(1)") == [1]
 
     def test_filtering_case_1(self):
-        input_string = "IF COUNT(foo.bar == 2) == 2 THEN RETURN(3) ELSE RETURN(None)"
-        lexer = DefaultLexer(variables={"foo": [{"bar": 1}, {"bar": 2}, {"bar": 2}]})
+        input_string = (
+            "IF COUNT(foo.bar == 2) == 2 THEN RETURN(3) ELSE RETURN(None)"
+        )
+        lexer = DefaultLexer(
+            variables={"foo": [{"bar": 1}, {"bar": 2}, {"bar": 2}]}
+        )
         dsl = DefaultDSL(lexer=lexer)
         assert dsl.execute(input_string) == [3]
 
     def test_filtering_case_2(self):
-        input_string = (
-            "IF COUNT(a.b == 2 AND a.c == 'd') == 1 THEN RETURN(3) ELSE RETURN(None)"
-        )
-        variables = {"a": [{"b": 1, "c": "d"}, {"b": 2, "c": "d"}, {"b": 2, "c": "e"}]}
+        input_string = "IF COUNT(a.b == 2 AND a.c == 'd') == 1 THEN RETURN(3) ELSE RETURN(None)"
+        variables = {
+            "a": [{"b": 1, "c": "d"}, {"b": 2, "c": "d"}, {"b": 2, "c": "e"}]
+        }
         lexer = DefaultLexer(variables=variables)
         dsl = DefaultDSL(lexer=lexer)
         assert dsl.execute(input_string) == [3]
@@ -421,7 +447,9 @@ class TestDefaultDSLExecute:
             "IF COUNT(a.b == 2 AND NOT a.c == 'd') == 1 "
             "THEN RETURN(3) ELSE RETURN(None)"
         )
-        variables = {"a": [{"b": 3, "c": "d"}, {"b": 2, "c": "d"}, {"b": 2, "c": "e"}]}
+        variables = {
+            "a": [{"b": 3, "c": "d"}, {"b": 2, "c": "d"}, {"b": 2, "c": "e"}]
+        }
         lexer = DefaultLexer(variables=variables)
         dsl = DefaultDSL(lexer=lexer)
         assert dsl.execute(input_string) == [3]
@@ -486,7 +514,9 @@ class TestDefaultDSLExecute:
         parser = DefaultParser(grammar=outcome_grammar)
         dsl = DefaultDSL(lexer=lexer, parser=parser)
 
-        input_string = "IF COUNT(Answers.Text == 'Fail') / 3 > 0.2 THEN OUTCOME(3)"
+        input_string = (
+            "IF COUNT(Answers.Text == 'Fail') / 3 > 0.2 THEN OUTCOME(3)"
+        )
         assert dsl.execute(input_string) == [3]
 
     def test_multiple_arg_return(self):
@@ -499,8 +529,12 @@ class TestDefaultDSLExecute:
 
     def test_two_lists(self):
         dsl = DefaultDSL()
-        assert dsl.execute("IF COUNT([1,0,1]) == 2 THEN RETURN([1,2,3])") == [[1, 2, 3]]
+        assert dsl.execute("IF COUNT([1,0,1]) == 2 THEN RETURN([1,2,3])") == [
+            [1, 2, 3]
+        ]
 
     def test_nested_lists(self):
         dsl = DefaultDSL()
-        assert dsl.execute("IF TRUE THEN RETURN([[1,2],2,3])") == [[[1, 2], 2, 3]]
+        assert dsl.execute("IF TRUE THEN RETURN([[1,2],2,3])") == [
+            [[1, 2], 2, 3]
+        ]

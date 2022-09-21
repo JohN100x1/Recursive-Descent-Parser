@@ -1,7 +1,7 @@
 from abc import ABCMeta, abstractmethod
 from typing import Any, ClassVar, Iterable
 
-from quac_core.dsl.models.representables import Representable
+from dsl.models.representables import Representable
 
 
 class Operator(Representable):
@@ -23,7 +23,9 @@ class Operator(Representable):
         if not cls.registrable:
             return
         if not hasattr(cls, "precedence"):
-            err_msg = f"{cls.__name__} missing required attribute 'precedence'."
+            err_msg = (
+                f"{cls.__name__} missing required attribute 'precedence'."
+            )
             raise AttributeError(err_msg)
 
 
@@ -62,7 +64,9 @@ class AttributeOperator(UnitaryOperator):
         """Evaluate input x using operation."""
         attr = self.token_value.split(".", 1)[1]
         if isinstance(x, list):
-            return [y[attr] if isinstance(y, dict) else getattr(y, attr) for y in x]
+            return [
+                y[attr] if isinstance(y, dict) else getattr(y, attr) for y in x
+            ]
         if isinstance(x, dict):
             return x[attr]
         return getattr(x, attr)

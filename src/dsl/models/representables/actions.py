@@ -1,7 +1,7 @@
 from abc import abstractmethod
 from typing import Any, ClassVar
 
-from quac_core.dsl.models.representables import Representable
+from dsl.models.representables import Representable
 
 
 class Action(Representable):

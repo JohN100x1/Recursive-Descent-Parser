@@ -1,8 +1,8 @@
 import pytest
 
-from quac_core.dsl.models.symbols import NonTerminalSymbol, TerminalSymbol
-from quac_core.dsl.models.symbols.nonterminals import ExpressionSymbol
-from quac_core.dsl.models.symbols.terminals import IntegerLiteral, InvalidSymbol
+from dsl.models.symbols import NonTerminalSymbol, TerminalSymbol
+from dsl.models.symbols.nonterminals import ExpressionSymbol
+from dsl.models.symbols.terminals import IntegerLiteral, InvalidSymbol
 
 
 class TestTerminalSymbol:
