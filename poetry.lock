@@ -76,11 +76,11 @@ plugins = ["setuptools"]
 
 [[package]]
 name = "mypy"
-version = "0.971"
+version = "0.982"
 description = "Optional static typing for Python"
 category = "dev"
 optional = false
-python-versions = ">=3.6"
+python-versions = ">=3.7"
 
 [package.dependencies]
 mypy-extensions = ">=0.4.3"
@@ -201,7 +201,7 @@ python-versions = ">=3.7"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "8a42e9b692a78a1aa39e1c6ea5d960e18e9311a45fb861f32b53ebaab4d90f82"
+content-hash = "636a627d5f0bcf9fec8be42efbe3b7205107f90a3ea4819671d2a58a4f94e744"
 
 [metadata.files]
 attrs = []
