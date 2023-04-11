@@ -5,7 +5,7 @@ description = ""
 authors = ["JohN100x1 <JohN100x1@hotmail.co.uk>"]
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = "^3.11"
 
 [tool.poetry.dev-dependencies]
 black = "^23.3.0"
