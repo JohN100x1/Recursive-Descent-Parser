@@ -76,13 +76,12 @@ class DefaultParser(Parser):
         """
         Expand a parse tree by trying all possible productions in the subtree
         :param node: The non-terminal node to expand
-        :param tree: The super-tree of the non-terminal node.
-        :param origin: The starting index of the terminal list to try to fit production.
-        :return: The total number of terminals contained within the expanded tree.
+        :param tree: The super-tree of the non-terminal node
+        :param origin: Starting index of terminal list to try to fit production
+        :return: Total number of terminals contained within the expanded tree
         """
         tree.append(node)
         for production in self.grammar[node.__class__]:
-
             if (production, origin) in self.rejected:
                 continue
             pointer = origin
@@ -115,7 +114,7 @@ class DefaultParser(Parser):
         """
         Reduces the parse tree into an execution tree
         :param node: A terminal or non-terminal symbol.
-        :return: A list of Representable objects (i.e. objects a symbol represents).
+        :return: A list of Representable objects (objects a symbol represents)
         """
         if isinstance(node, TerminalSymbol):
             return [node.represents]

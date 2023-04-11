@@ -204,17 +204,18 @@ class EvaluableExpression(Evaluable):
         """
         Evaluate the contents of the Evaluable expression.
 
-        NOTE: The order of operations is implied by the structure of the grammar
-        If the grammar is incorrect, then evaluating the expression will evaluate the
-        order of operations incorrectly.
+        NOTE: The order of operations is implied by the structure of the
+        grammar. If the grammar is incorrect, then evaluating the expression
+        will evaluate the order of operations incorrectly.
         """
         operators: deque[UnitaryOperator | BinaryOperator] = deque()
         operands: deque[
             Any
         ] = deque()  # Contains the true value of the operands
         for item in self.contents:
-            # The only Representable object we care about inside an evaluable expression
-            # are the operators, operands, and Evaluable (which we treat as operands).
+            # The only Representable object we care about inside an evaluable
+            # expression are the operators, operands, and Evaluable
+            # (which we treat as operands).
             if isinstance(item, (UnitaryOperator, BinaryOperator)):
                 operators.append(item)
             if isinstance(item, Evaluable):
@@ -225,7 +226,7 @@ class EvaluableExpression(Evaluable):
             if not operators:
                 continue
 
-            # Check if there's enough operands to use for the first operator in queue
+            # Check if there's enough operands for first operator in queue
             if operands and isinstance(operators[0], UnitaryOperator):
                 operator = operators.popleft()
                 x = operands.pop()
@@ -244,8 +245,8 @@ class EvaluableExpression(Evaluable):
 
         if len(operands) != 1:
             raise DSLRuntimeError(
-                f"Evaluation of Evaluable with {self.contents=} did not collapse to "
-                "a single value."
+                f"Evaluation of Evaluable with {self.contents=} did not "
+                f"collapse to a single value."
             )
 
         return operands.pop()

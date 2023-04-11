@@ -88,7 +88,7 @@ class DefaultDSL(AbstractDSL):
     def get_actions(self, evaluable: Evaluable) -> list[EvaluableAction]:
         """
         Get a list of evaluable actions.
-        :param evaluable: An evaluable object, contains evaluable/representable objects.
+        :param evaluable: Evaluable object, contains evaluable/representable
         :return: A list of evaluable action objects
         """
         actions = []
@@ -103,8 +103,8 @@ class DefaultDSL(AbstractDSL):
     @staticmethod
     def validate_action(action: EvaluableAction):
         """
-        Validate an Evaluable action and raises an error if the args are not valid for
-        the action
+        Validate an Evaluable action and raises an error if the args are not
+        valid for the action
         :param action: An EvaluableAction object.
         :return: None, raises an error if args are invalid.
         """

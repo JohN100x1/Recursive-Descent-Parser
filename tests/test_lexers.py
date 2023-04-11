@@ -1,3 +1,5 @@
+from typing import ClassVar
+
 import pytest
 
 from dsl import DefaultLexer
@@ -86,7 +88,7 @@ class TestTokenize:
 
     def test_included_symbol(self):
         class FooSymbol(TerminalSymbol):
-            regex: str = "FOOBAR"
+            regex: ClassVar[str] = "FOOBAR"
 
             def represents(self) -> None:
                 return None

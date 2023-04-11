@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, ClassVar
 
 import pytest
 
@@ -110,7 +110,10 @@ class TestDefaultDSLValidate:
 
     def test_three_outcomes(self):
         dsl = DefaultDSL()
-        input_string = "IF 1.2 > 3.4 THEN RETURN(5) IF 8 > 6.7 THEN RETURN(9) ELSE RETURN(3)"
+        input_string = (
+            "IF 1.2 > 3.4 THEN RETURN(5) IF 8 > 6.7 THEN RETURN(9) ELSE "
+            "RETURN(3)"
+        )
         validation_result = dsl.validate(input_string)
         assert validation_result.is_valid is True
         assert validation_result.actions == [
@@ -152,14 +155,14 @@ class TestDefaultDSLValidate:
 
     def test_included_symbol(self):
         class FooFunction(Function):
-            precedence: int = -1
-            registrable: bool = True
+            precedence: ClassVar[int] = -1
+            registrable: ClassVar[bool] = True
 
             def evaluate(self, x: Any) -> Any:
                 return x % 3 + 1
 
         class FooFunc(TerminalSymbol):
-            regex: str = r"FooFunc\("
+            regex: ClassVar[str] = r"FooFunc\("
 
             @property
             def represents(self) -> FooFunction:
@@ -360,7 +363,10 @@ class TestDefaultDSLExecute:
         assert dsl.execute(input_string) == [None]
 
     def test_not_and_or_precedence(self):
-        input_string = "IF 0 == 1 OR NOT 2 == 3 AND 4 > 3 THEN RETURN('foo') ELSE RETURN(None)"
+        input_string = (
+            "IF 0 == 1 OR NOT 2 == 3 AND 4 > 3 THEN RETURN('foo') ELSE "
+            "RETURN(None)"
+        )
         dsl = DefaultDSL()
         assert dsl.execute(input_string) == ["foo"]
 
@@ -434,7 +440,10 @@ class TestDefaultDSLExecute:
         assert dsl.execute(input_string) == [3]
 
     def test_filtering_case_2(self):
-        input_string = "IF COUNT(a.b == 2 AND a.c == 'd') == 1 THEN RETURN(3) ELSE RETURN(None)"
+        input_string = (
+            "IF COUNT(a.b == 2 AND a.c == 'd') == 1 THEN RETURN(3) ELSE "
+            "RETURN(None)"
+        )
         variables = {
             "a": [{"b": 1, "c": "d"}, {"b": 2, "c": "d"}, {"b": 2, "c": "e"}]
         }
